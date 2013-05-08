@@ -1,0 +1,735 @@
+------------------------------------------------------------------------------
+#FORMAT #HOWTO #201303
+------------------------------------------------------------------------------
+
+Chaque chapitre est séparé par une double ligne de tiret '-'
+Chaque tag commence par un #
+Essayer de mettre en dernier tag un tag de date comme ci-dessus qui correspond
+  à la date de dernière edition de la section
+
+Pour parcourir : search sur le motif '^---
+
+------------------------------------------------------------------------------
+#COMPTE #USER #UTILISATEUR
+------------------------------------------------------------------------------
+
+Pour faire disparaitre un compte de la liste des compte de login
+il faut changer le user id en le mettant < 1024
+
+usermod -u <le nouveau num> <username à changer>
+ex : 
+usermode -u 999 dlaurent
+
+# Pour cacher la liste des utilisateur > à 1024
+greeter-hide-users=true
+# Pour afficher le login en manuel
+greeter-show-manual-login=true
+# Pour interdire les guest
+allow-guest=false
+
+------------------------------------------------------------------------------
+#MAIL #THUNDERBIRD
+------------------------------------------------------------------------------
+
+Les fichier eml sont des mails brutes au format texte, un peu tout 
+les éditeurs sont capable de les lire (entre autres thunderbird).
+
+Thunderbird permet de les exporter en masse en en sélectionnant plusieur et en faisant enregistrer sous.
+
+Pour récuperer des mails de google depuis thunderbird
+1/ configurer son compte en laissant les options par défaut
+2/ créer un répertoire local dans thunderbird ou on veut mettre les mails
+3/ un fois le compte google synchroniser, faire un copier coller des mail dans le répertoire cible d'archive
+4/ demander la suppression des mail dans la source.
+5/ aller dans google mail et vider la poubelle.
+
+------------------------------------------------------------------------------
+#FSTAB / #MOUNT
+------------------------------------------------------------------------------
+
+Pour monter les périphérique par UUID
+sudo blkid donne les UUID
+remplacer la ligne de /etc/fstab par UUID=#
+
+------------------------------------------------------------------------------
+#GRUB
+------------------------------------------------------------------------------
+Pour positionner le démarrage par défaut sur windows
+dans /etc/default/grub
+>GRUB_DEFAULT="Windows 7 (loader) on /dev/sda2"
+grub-mkconfig -o /boot/grub/grub.cfg
+
+------------------------------------------------------------------------------
+#POSTGRESQL / #DATABASE
+------------------------------------------------------------------------------
+
+Par défaut postgres est installée dans le login postgres.
+C'est son login d'administration principal
+La base postgres est la base système.
+
+Pour faire un test rapide 
+> su - postgres
+> # connexion sur la base postgres
+> psql postgres
+# -- Pour avoir la liste des tables systèmes
+# select * from pg_tables;
+
+
+Pour qu'un user lambda puisse accéder à une base de donnée il faut lui creer un user d'accès à la base, ce user n'a rien a voir avec le user system unix, il doit être déclaré dans l'instance de base de données.
+> su - postgres
+> createuser 
+> Suivre les indications demandées
+
+
+
+Pour utiliser ce depuis son propre user 
+> psql postgres ydg
+ou
+> psql postgres
+> # l'utilisateur est l'utilisateur unix par défaut ==> c'est une méthode de connexion "unix like" voir plus bas
+ou
+> psql -U ydg postgres
+Comme le user postgres est un utilisateur d'admin plutôt en ligne de commande il faut allouer a son user des droits d'admin parfois (genre création de table) ... sinon l'utilisation de pgadmin n'est pas possible (puisque il n'y a pas de desktop).
+
+
+
+Pour démarrer le base :
+sudo /etc/init.d/postgresql start
+sudo /etc/init.d/postgresql stop
+
+
+Sur les modes d'authentification
+L'authentification utilise un mode tcp/ip ou unix. Pour cette raison on peut se connecter sans indiquer d'hote dans le fenetre d'ajout d'un serveur de pgadmin.
+Voir ce thread interessant sur ce sujet :
+http://archives.postgresql.org/pgadmin-support/2006-01/msg00007.php
+Aussi :  Ident-based authentication dans le manuel postgresql
+
+Resource interessantes :
+http://wiki.postgresql.org
+
+Configuration de la connexion par le réseau (localhost ici)
+cd /etc/postgresql/8.4/main
+vi postgresql.conf
+# editer la ligne
+listen_addresses = 'localhost' 
+# décommentage de la ligne
+password_encryption = on
+
+Le changement dans le fichier pg_hba.conf ne fait rien...
+http://wiki.postgresql.org/wiki/Detailed_installation_guides#Debian.2FUbuntu_Linux
+
+http://www.stuartellis.eu/articles/postgresql-setup/#enabling-remote-use
+http://hocuspokus.net/2008/05/install-postgresql-on-ubuntu-804/
+http://russbrooks.com/2009/5/25/install-ubuntu-9-04-server-edition-rails-php-passenger-postgresql-and-mysql
+http://www.debianhelp.co.uk/postgresql.htm ... à lire
+
+en retirant toutes les lignes du fichier pg_hba.conf pour ne laisse que : 
+host    all         all         127.0.0.1/32          trust
+
+j'obtiens une erreur du style "::1" host unknown, ceci montre que postrges se connecte en ipv6. En retirant la définition du localhost en ipv6 du fichier
+/etc/hosts : ça passe. En fait il faut appliquer la configuration en trust
+sur le hosts en ipv6.
+
+------------------------------------------------------------------------------
+#APACHE / #WEB 
+------------------------------------------------------------------------------
+
+Sur UBUNTU ___________________
+
+Le répertoire d'apache est : /var/www
+Le user apache est www-data (idem pour le groupe)
+
+arrêt/redémarrage
+ydg@YDG-U35-LAPTOP:/var/log/apache2$ sudo /etc/init.d/apache2 stop
+ * Stopping web server apache2                                                      ... waiting                                                                [ OK ]
+ydg@YDG-U35-LAPTOP:/var/log/apache2$ sudo /etc/init.d/apache2 start
+ * Starting web server apache2                                              [ OK ] 
+ydg@YDG-U35-LAPTOP:/var/log/apache2$ 
+
+
+Sur MAC OSX ____________________
+
+Sur le mac je ne sais pas où sont installé les binaires apache
+
+La configuration est dans /etc/apache2 qui est un ln sur /private/etc/apache2
+
+document root : /Library/WebServer/Documents
+accéder au manuel : http://mac-adg.local/manual/
+
+version (httpd -)v est 2.2.22 de juillet 2012
+
+Pour redémarrer apache
+sudo apachectl restart
+
+------------------------------------------------------------------------------
+#DRUPAL / #CMS
+------------------------------------------------------------------------------
+
+copier les fichiers dans le répertoire d'apache
+# cd drupal-7.0
+# sudo rm -r /var/www/*
+# sudo cp -r * /var/www
+# sudo chown -R www-data:www-data /var/www/*
+
+appeler http://localhost/index.php
+
+ne pas oublier de faire une chmod -R www-data:www-data
+
+A l'install télécharger les module francais
+Le placer dans le répertoire indiqué 
+recharger la page de sélection de la langue
+
+HIC : http://drupal.org/node/270#database
+La base supporté est la 8.3 , j'ai la 8.4
+ceci ne semble pas trop problématique
+
+voir le fichier INSTALL.TXT à la racine de DRUPAL
+
+création du répertoire 
+ydg@YDG-U35-LAPTOP:/var/www/sites/default$ sudo mkdir files
+ydg@YDG-U35-LAPTOP:/var/www/sites$ sudo chmod a+w default/
+
+Attention quand certains modules php ne sont pas installés, il faut arrêter et redémarrer Apache pour qu'ils soient pris en compte
+
+L'authente marche pas car il faut drupal accèdes par la stack TCP/IP à la base. L'authent "unix" de postgres n'est pas utilisée.
+
+Pas d'installation de la version française : car pb lors de l'installation.
+La version anglaise fonctionne (suffisant pour les tests)
+login ydg/ydg
+
+------------------------------------------------------------------------------
+#UNITY / #UBUNTU
+------------------------------------------------------------------------------
+
+Pour savoir si unity 3D est supporté
+/usr/lib/nux/unity_support_test -p
+
+Un bug existe sur unity2D qui implique un bord fin des fenetres de 1 pixel
+Le contournement est de modifier les fichier directement (pas de UI)
+https://bugs.launchpad.net/ubuntu/+source/unity-2d/+bug/878198
+
+le gestionnaire de configuration compiz fonctionne en 3D mais pas en 2D.
+il ne sert donc à rien, il est sans effet.
+
+Aussi paradoxal que cela puisse paraitre, compiz fait marcher des unity3D. Cependant certaines config peuvent être faite dans gconf dans metacity. Par exemple la position de la croix (et la forme des barres de titre des fenêtres) peut être modifié par ce chemin. 
+
+------------------------------------------------------------------------------
+#LOGIN / #DESKTOP / #LOGOFF
+------------------------------------------------------------------------------
+
+Cette section est relative à l'A/R (login/logoff) dans une session graphique, 
+et l'ajout de l'execution de programme/script à l'arrêt ou bien au
+démarrage de la session. 
+A noter le démarrage de scripts peut être fait au niveau système via les 
+mécanisme linux standards de runlevel (init.d, rc.d, ...) 
+cepedant ce mécanisme a été remplacé sur ubuntu.  Son remplaçant est un 
+mécanisme se base sur des évènements et plus sur des runlevels. Ce nouveau 
+mécanisme étant un remplaçant de l'ancien il s'appelle pareil "init".
+Pour plus de détail voir "man init".
+
+Pour ajouter et supprimer une programme au démarrage de la session
+
+Pour le démarrage de la session ajouter une programme à "applications au démarrage". 
+
+Pour l'ajout d'un programme à l'arrêt c'est plus compliqué.
+
+Voir le post : http://ubuntuforums.org/showthread.php?t=1969822
+
+Le  7/3/13 j'ai essayé le code suivant dans /etc/lightdm/lightdm.conf ...
+sans succès. (test de fermeture et de réouverture de session sans 
+arrêt de l'ordinateur)
+[LightDM]
+session-cleanup=test -x ~/mylog.sh && ~/mylog.sh cleanup
+
+[SeatDefaults]
+greeter-session=unity-greeter
+user-session=ubuntu
+
+------------------------------------------------------------------------------
+#DESKTOP / #GDM / #GNOME_SHELL
+------------------------------------------------------------------------------
+
+Voir le desktop : ctrl+alt+d
+
+
+------------------------------------------------------------------------------
+#WINDOWSMANAGER / #LIGHTDM
+------------------------------------------------------------------------------
+
+Sur ubuntu le gestionnaire de la page de login s'appelle lightdm.
+
+Voir : http://doc.ubuntu-fr.org/lightdm
+
+
+------------------------------------------------------------------------------
+#WINDOWSMANAGER / #XFCE
+------------------------------------------------------------------------------
+
+Si pas de bordure : il faut lancer le windows manager
+/usr/bin/xfwm4
+
+
+------------------------------------------------------------------------------
+#WINDOWSMANAGER / #COMPIZ
+------------------------------------------------------------------------------
+
+unity2D : utilise metacity comme window manager
+gnome-fallback : utilise metacity 
+gnome : utilise mutter
+Normalement la conf est dans gconf /dekstop/gnome/application/windowmanager
+
+unity ne lit pas gconf (au 11/11/2011 voir lien en bas) pour connaitre le windows manager, il lit dans /usr/share/gnome-session/sessions.
+Utile pour faire des tests en changeant de windows manager un moyen simple est l'option replace. Par exemple :
+$compiz --replace
+$xfwm4 --replace (window manager de xfce)
+$metacity --replace
+
+Il y a eu plusieurs politiques de window manager. Des WM comme metacity sont volotairement simple est offre peu de capacité de tuning par une interface (on tombre rapidement sur du tweak parfois en ligne de commande).
+
+Il faut noter que les WM modernes exploitent les capacités 3D des cartes. ce qui implique que toutes les carte ne sonts pas supportées. Par exemple le WM de unity utilise la commande suivante pour choisir entre unity (effet 3D) et unity2D:
+$ /usr/lib/nux/unity_support_test -p
+
+la commande 
+$compiz -replace
+sur l'asus U35JC avec la carte nvidia arrêté par ACPI retourne une erreur car la carte intel HD graphics du core I3-370M ne supporte par le mapping de texture harware. La commande ci-dessous le confirme.
+$ /usr/lib/nux/unity_support_test -p
+
+Le support resteint de cartes simples par ces windows manager modernes pose des problème au parc installé (car il faut maintenir deux versions des environnements). Par exemple pour gnome on a gnome et gnome-fallback, et gnome-fallback impose une deuxième maintenance qui se traduit dans la médiocrité par rapport à gnome. Il faut noter que le concept d'activité n'est dispo que dans gnome et pas dans gnome-fallback. La mise en place d'un render soft est prévu dans FC17 ici :
+https://fedoraproject.org/wiki/Features/Gnome_shell_software_rendering
+
+quelques lien 
+http://askubuntu.com/questions/61419/change-the-window-manager-unity-2d-launches-on-login
+
+------------------------------------------------------------------------------
+#NVIDIA / #GRAPHIC_CARD
+------------------------------------------------------------------------------
+
+Les shell (unity 3D / gnome shell) demande de la puissance. Cette puissance
+est dispo de base que avec les cartes conséquente. Or pour un portable on
+veut economiser de la puissance. Donc autant désactiver la carte NVIDIA sous 
+ubuntu et attendre un version correcte des window manager, car la carte intégré du core I3 n'est pas nulle. La carte intégrée est une Intel HD Graphics (il ne s'agit pas d'une carte HD 3000 qui sont celles des architectures sandybridge sortie en 2011 : voir http://intellinuxgraphics.org/documentation.html)
+
+http://forum.ubuntu-fr.org/viewtopic.php?id=565321&p=1
+
+Installation de ironhide au cas ou :
+1- Install
+2- Reboot
+3- sudo ironhide-configuration
+4- optirun64 glxgears
+
+Désactiver la carte:
+post interessant : http://robbyx.net/blog/?p=190
+
+Attention la désactivation de la carte doit brouiller les pistes pour la configuration de X. Le fichier /etc/X11/xorg.conf doit être modifier pour indiquer le bon driver intel. Pour connaitre le BusId faire lspci. Ci-dessous la conf :
+Section "Device"
+	Identifier	"Configured Video Device"
+	Driver		"intel"
+   	BusId		"PCI:0:2:0"
+EndSection
+
+
+------------------------------------------------------------------------------
+#VIM / #GVIM
+------------------------------------------------------------------------------
+
+Fichier de settings ~/.vimrc
+
+" Faire un copier / coller depuis ici ........
+
+" Suppression de backup
+set nobk
+" Active la coloration syntaxique
+syntax enable
+" TAB à 4 avec remplissage d'espace
+???? set sw = 4
+???? set ts ???
+
+" .... jusque la
+
+le menu :options permet de configurer vim en interactif
+
+------------------------------------------------------------------------------
+#MP3
+------------------------------------------------------------------------------
+
+Installer sound-juicer
+
+------------------------------------------------------------------------------
+#VIDEO #TOTEM #UBUNTU 
+------------------------------------------------------------------------------
+
+Nettoyer l'historique des application dans ubuntu (comme totem)
+rm ~/.local/share/recently-used.xbel
+touch ~/.local/share/recently-used.xbel
+rmdir ~/.local/share/totem
+
+
+------------------------------------------------------------------------------
+#AVI #VIDEO #DVD
+------------------------------------------------------------------------------
+
+Ripper un DVD : 
+1/ installer libdvdcss
+	installer les codecs : apt://ubuntu-restricted-extras
+        installer lbdvdcss   : sudo sh /usr/share/doc/libdvdread4/install-css.sh
+2/ Installer & Utiliser ogmrip 
+3/ Extraire le fichier au format mkv avec ogmrip en lui demanddant de copier le DVD
+4/ Convertir au format souhaité avec mencoder (un morceau de mplayer)
+mencoder -oac mp3lame -lameopts cbr=256  -ovc xvid -xvidencopts bitrate=900 HUNTERS_D7_PAL.mkv -o nom_du_fichier_final.avi
+
+
+------------------------------------------------------------------------------
+#EMACS
+------------------------------------------------------------------------------
+
+Pour supprimer la fenêtre d'aide C-X C-1
+
+Refaire le mapping des clés
+keys --> meaning --> commande --> lisp function
+
+Faire des copier / coller (de base)
+Couper C-w             kill-region (between cursor and mark)
+Coller C-y             yank (i.e., insert text last killed)
+Copier M-w	       (M = alt)
+Note : il est possible d'activer les raccourcis classiques (CTRL+C/X/V)
+
+
+------------------------------------------------------------------------------
+#PHOTO / #SHOTWELL / #PICASA
+------------------------------------------------------------------------------
+
+Les photos sont sur le NAS
+Le format d'import est le suivant :
+   - AAAA_MM_DD_TEXTE (Texte pour poser un tag)
+   - Les photos contiennent des tags
+
+Sur Windows : Picasa
+Picasa met les tags dans les photos sans problème.
+Il ne met pas les tags de visage dans les photos
+L'import plante sous linux (il faut utiliser wine pour l'install Linux)
+
+Sur Mac : Picasa
+
+Sur linux : Shotwell + montage NFS
+
+Sur Linux Shotwell fonctionne de manière compatible
+Il faut paramétrer shotwell : %Y_%m_%d pour les imports
+ 
+------------------------------------------------------------------------------
+#MONEY / #MONEYDANCE / #QUICKEN
+------------------------------------------------------------------------------
+
+moneydance est installé dans /usr/local/moneydance
+
+------------------------------------------------------------------------------
+#MONEY / #GNUCASH
+------------------------------------------------------------------------------
+
+Installer une version stable
+1/ sudo apt-get build-dep gnucash
+2/ sudo apt-get install texinfo subversion intltool libdbi0-dev libdbd-{sqlite3,pgsql,mysql} guile-1.8 guile-1.8-dev doxygen libwebkit-dev
+3/ cd /usr/share/guile/1.8;sudo ln -s ../../slib slib;sudo guile -c "(use-modules (ice-9 slib)) (require 'new-catalog)"
+3/ svn checkout http://svn.gnucash.org/repo/gnucash/tags/2.4.6/ gnucash
+4/ ./autogen.sh (cela ne marche pas quand on prend pas un version de SVN ?!...)
+5/ ./configure --prefix=$HOME/stable/gnucash --enable-debug --enable-doxygen --enable-error-on-warning --enable-compile-warnings
+
+Voir http://wiki.gnucash.org/wiki/Building
+
+VOIR LE HOWTO GNUCASH POUR PLUS DE DÉTAIL
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+#LINUX / #SYSTEM / #UNIX
+------------------------------------------------------------------------------
+
+64 bits ou 32 bits
+
+uname -m
+
+i686 = 32 bits
+x86_64 = 64 bits
+
+-------------------------------------------------------------------------------
+Pour changer les droits sur le groupe sans toucher les droits d'execution
+chmod g+w toto
+
+-------------------------------------------------------------------------------
+
+WIFI : installer les modules non supporté actuellement (backports)
+linux-backports-modules-2.6.28-11-generic_2.6.28-11.11_i386.deb
+
+------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+#INSTALL / #UBUNTU
+-----------------------------------------------------------------------------
+
+Pour installer ubuntu: sur le disque dur portable il y a une partion de boot
+avec une net install de la 13.04.
+
+Pour obtenir une nouvelle net install :
+1/ chercher sur le forum ubuntu, 
+2/il faut récuperer deux fichiers dans l'image du CD : 
+     initrd.gz et linux (ils sont dans le répertoire ubuntu-installer 
+     sur la 13.04). 
+3/ Copier ces deux fichiers dans /boot de la distrib installée
+     sur le disque portable
+
+Pour installer la version 13.04 : 
+0/ Il faut que le PC soit branché par cable (eth) au réseau
+1/ Booter en USB sur le disque externe
+2/ Au boot Grub appuyer sur 'c'
+3/ ls -l permet d'identifier le disque destination ou l'on veut installer ubuntu
+4/ root=(hd0,msdos1) ... à adapter en fonction du point 3
+5/ linux /boot/linux
+6/ initrd /boot/initrd.gz
+7/ boot
+
+
+-----------------------------------------------------------------------------
+#INSTALL / #GOLGOTH13
+-----------------------------------------------------------------------------
+
+Config
+	Gigabyte Triton
+	CM P5B Deluxe WIFI/AP 
+		socket 775
+		IDE: Ultra ATA 133 + SATA : ATA/II
+		PCI Express 16x
+                2 ethernet : marvell
+	1x1024Mo Corsair VSG1GB667D2
+	1x1024Mo Kingston KVR667D2N5/1G-IND (1GB PC2 - 5300 CL5240 - Pin DIMM)
+	Intel Core 2 Duo 6400
+	HDD Samsung SP2504C 250Go
+	Asus DVD-E616A2 DVD-UOM
+	Alim Seasonic S12 430W
+	Refroi : Thermalright SI-128 + Papst Partition :
+	CG gigabyte silentpipe 256 Mo 7300GT
+
+
+-----------------------------------------------------------------------------
+#X11 #GRAPHIC_CARD #NVDIA #GOLGOTH13
+-----------------------------------------------------------------------------
+ 
+
+	Pb : Overscan a l'allumage
+	correction :
+		1- demarrer en mode rescue
+    		2- editer le fichier /etc/X11/xorg.conf
+		3- ajouter dans Screen/Display "Modes "1280x1024" "800x600"
+
+	Pb : Configuration de la carte NVIDIA
+	correction :
+                1- Ouvrez le gestionnaire de paquets Synaptic 
+                2- Recherchez les paquets contenant le mot nvidia
+                3- Installez les paquets :
+                    * nvidia-glx 
+                    * linux-restricted-modules-version_de_votre_noyau 
+                4- dans un shell sudo nvidia-xconfig
+
+	Pb : Monter un iso
+	correction : 
+                sudo mount -t iso9660 -o ro,loop ./the_fountain_dvdr-ct.img /home/ydg/iso
+-----------------------------------------------------------------------------
+#MAIL #GOLGOTH13
+-----------------------------------------------------------------------------
+	Mail : Pour effacer les mail
+                Je ne connais pas la commande pour lister les entetes comme 
+		lorsque on lance la commande
+		Pour supprimer les mail "d 1-20" pour supprimer les mails de 1 a 20
+-----------------------------------------------------------------------------
+#RESEAU #NET #GOLGOTH13
+-----------------------------------------------------------------------------
+
+	Pb : arreter et redemarrer la connexion ethernet
+ 		ifdown eth0
+		ifup eth0
+
+        Pb : Samba restart
+		sudo /etc/init.d/samba restart
+
+	Pb : Install WIFI
+		chipset rtl8187 non reconnu par les distrib et pas de driver OK
+		(soit via ndiswrapper, soit en direct) ... laisse tombé ... 
+                 utilisation d'un cable
+		en attendant un distrib potable. 
+                Même en configuration simple (clé WEP) ne fonctionne pas
+		le problème n'est pas du à wpa_supplicant.
+
+
+		EAP : Extensible Authentication Protocol
+		IE : Information Element
+		WPA : Wi-Fi Protected Access
+		TKIP : Temporal Key Integrity Protocol
+		WEP : Wired Equivalent Provacy
+
+		Voir archive en bas pour notes prises durant la tentative
+
+	Pb : FTP arrêt / redémarrage
+		sudo /etc/init.d/proftpd stop / start / restart
+
+
+
+-----------------------------------------------------------------------------
+#MEDIA #GOLGOTH13
+-----------------------------------------------------------------------------
+
+Installation de l'imprimante partage par samba
+
+	Utilisation des outils standard ubuntu
+	Installer une imprimante postcript en téléchargeant les drivers sur le 
+        site d'Adobe: http://www.adobe.com/support/downloads/
+
+Installation d'un nouveau disque dur
+	La manipulation de volume logique (LVM) n'est pas dans les outils standard,
+        et encore en ligne de commande. La methode ci-dessous est la methode classique
+        sans lvm. Faire une recherche sur lvm pour plus d'info, a la date du jour
+        il existe un package en ligne de commande "lvm2" qui gere les volumes logiques
+
+        1- Utiliser dmesg | grep sd pour connaitre le nom de preripherique du disque
+        2- sudo cfdisk /dev/sdX sur le disque
+        3- sudo mkfs.ext3 /dev/sdX
+             est-ce equivalent mkfs -t ext3 /dev/sdX ?
+        4- sudo vi /etc/fstab 
+             faire pointer le disque sur un repertoire, les options de montage sont : (rw,auto)
+        5- mount -a
+
+-----------------------------------------------------------------------------
+#SVN #DEVELOPPEMENT #SUBVERSION #GOLGOTH13
+-----------------------------------------------------------------------------
+	Le nom de l'editeur peut etre definit dans la variable SVN_EDITOR
+
+	article interessant (description mode svnserve) :
+http://jay.bertrand.free.fr/blog/index.php?/archives/27-Installer-Subversion-sous-Debian.html
+        
+        creer un repository :
+	svnadmin create path_to_repository
+
+-----------------------------------------------------------------------------
+#IMPRIMANTE #GOLGOTH13
+-----------------------------------------------------------------------------
+
+	Login CUPS :
+		utiliser son login/password utilisateur 
+		ce password est demandé pour faire un cancel de job par ex
+________________________________________________________________________________
+
+Controleur JMicron
+chipset JMB363
+________________________________________________________________________________
+Liens :
+http://lea-linux.org/pho/read/6/308398		
+
+------------------------------------------------------------------------------
+#APACHE_GIT #HTTPS #SERVEUR_GIT
+------------------------------------------------------------------------------
+
+Description du serveur apache installé sur le mac qui est un repository git
+servit en HTTPS avec une authorité de certification perso. Pour voir les 
+commande plutôt spécifique à git voir le tag #GIT
+
+Archi :
+- User git sur le mac et sur le NAS avec le même MDP
+- Git est installé sur le MAC via packet récupéré sur internet
+- J'utilise pas gitolite car c'est un outil adapté à la gestion de plusieurs
+  utilisateurs. Dans mon cas un voire deux utilisateurs sont suffisant.
+- Le mac heberge le serveur apache HTTPS, la freebox dirige le port 443
+  vers le mac. DocRoot = /Library/WebServer/Documents/gp
+- Je n'ai pas fait de serveur ssh (ça aurait été plus simple) car le 
+  port 22 est bloqué à l'APEC.
+- Le repository est sur le NAS, le montage est en NFS. 
+
+Mémo / Notes / URL / Doc :
+- Le chapite 4 du book ici : http://git-scm.com/book décrit tout les serveurs possible
+- Pour créer un server GIT il y a plusieurs manière de faire. La plus simple pour un nombre limité de personne est d'utiliser git sur SSH. Dans des configurations plus compliqué des solutions comme gitolite ou gitosis sont plus adapté. 
+- Pour faire un server git il faut créer un user système adqéquate (souvent "git") sur le server. Pour des raisons de sécurité ce user peut disposer d'un shell particulier "git-shell" qui limite les possibilités.
+- Le mot de passe de l'AC est level3 sinon level2 sur git-ydg 
+- http://blog.ulysses.fr/index.php/post/17/09/2011/Mon-GIT-%C3%A0-la-maison-!-Git-Gitolite-cgit-%28ou-gitweb%29
+- Le montage via AFP semble pas simple en ligne de commande classique, il recommande dans quelques posts de passer par des script apple dédié (apple script, fichier plist, etc...), voici un post trés détaillé sur le sujet http://www.gregwillits.ws/articles/using_launchd_to_mount_afp_share_point_upon_startup. J'ai donc pris NFS pour un montage interne c'est trés bien.
+
+
+Procédure pour configurer le serveur il y a un shell qui fait du pas à pas pour configureur le serveur apache sur mac osx 10.6
+1. se logguer sur le serveur
+2. cd bin
+3. ./mk-https-osx.sh
+
+Procédure pour créer un repository
+1. se logguer sur le mac
+2. cd bin
+3. ./mk-gitrepo-apache.sh
+
+Procédure pour A/R le serveur
+1. se logguer sur le mac
+2. cd bin
+3. ./restartgit.sh
+
+
+Pour créer un repository sur un serveur il faut créer une version "bare" de son
+repository.
+Depuis le client
+$ git clone --bare project project.git
+$ scp project.git <user>@<server>:<path>
+
+Sur le server
+$ mkdir project
+$ cd project
+$ git --bare init 
+
+
+RAF :
+Clarifier la solution (figer les conf, les répertoire)
+Documenter
+mk-gitrepo-apache.sh : refaire le script de création de repository avec la nouvelle conig apache, le tester
+changer les mdp git
+
+
+------------------------------------------------------------------------------
+#GIT #DEVELOPPEMENT
+-----------------------------------------------------------------------------
+
+Pour récuperer ce repository en local
+- La première fois
+$ git clone https://ydg@git-ydg/gp/mydemoproject.git
+
+Pour pousser une branche local dans le distant
+$ git push origin master
+
+Pour stocker le mot de passe git en local
+vi ~/.netrc
+ajouter les lignes :
+machine git-ydg
+login steve password steve_password
+puis
+chmod 600 ~/.netrc
+
+Pour eviter le erreur HTTPS
+L'appel en ligne de commande pose des problèmes car l'autorité de certfication
+n'est pas dans le /etc/ssl/certs. Pour des raisons obscures même en rajoutant
+le certificat de la CA : ça fonctionne pas. Un moyen consiste à désactiver
+la vérification pour git en ligne de commande comme suit :
+$ export GIT_SSL_NO_VERIFY=true
+
+
+------------------------------------------------------------------------------
+#MAC OS X
+-----------------------------------------------------------------------------
+Ajout d'un utilisateur : passer par l'interface graphique. Les commandes disponible sur le net ne marche pas forcément. Elles sont spécifique à l'OS et sa version.
+
+Pour connaitre la version de l'os MAC OSX
+sw_vers -productVersion
+
+------------------------------------------------------------------------------
+#SSH
+-----------------------------------------------------------------------------
+
+Pour installer des connexion dans mdp
+
+
+cd
+ssh-keygen -t rsa
+ssh root@<server> mkdir -p .ssh
+ssh root@<server> chmod -R 700 .ssh
+cat .ssh/id_rsa.pub "|" ssh root@<server> 'cat >> .ssh/authorized_keys'
+
+Y64--ydg
+

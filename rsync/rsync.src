@@ -1,0 +1,49 @@
+
+
+HOST_DIST=nas-adg-ext
+HOST_LOCAL=nas-adg.local
+DIST_SYNCHRO_LOCK=~/.distLock
+
+G_FLI_FILENAME=""
+G_FLI_IDX=0
+G_FLI_NBLINE=0
+G_FILEIT_LINE=0
+
+file_line_iterator () {
+  G_FLI_FILENAME=$1
+  G_FLI_NBLINE=`wc -l < $G_FLI_FILENAME`
+  G_FLI_IDX=0
+  G_FLI_LINE_VAR=$2
+  #echo FNV $G_FLI_FILENAME / $G_FLI_NBLINE / $G_FLI_LINE_VAR
+
+}
+
+next_line () {
+    CURR_LINE=""
+    while [ "$CURR_LINE" = "" -a $G_FLI_IDX -lt $G_FLI_NBLINE ]; do
+      G_FLI_IDX=$(expr $G_FLI_IDX + 1)
+      CURR_LINE=`head -n $G_FLI_IDX $G_FLI_FILENAME | tail -1`
+      CURR_LINE=`echo $CURR_LINE | sed 's/^#.*//g'`
+    done
+
+    eval "$G_FLI_LINE_VAR=\"$CURR_LINE\""
+
+    if [ "$CURR_LINE" = "" ]; then
+	return 1;
+    else 
+	return 0;
+    fi
+}
+
+# CODE UTILE _____________________________________________
+exemple_get_line() {
+MY_VAR=""
+file_line_iterator $1 MY_VAR
+
+while next_line ; do
+  
+  echo $MY_VAR
+
+done
+}
+

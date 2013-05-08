@@ -1,0 +1,129 @@
+*******************************************************************************
+*******************************************************************************
+HOWTO gnucash
+*******************************************************************************
+*******************************************************************************
+
+-------------------------------------------------------------------------------
+/home/ydg/project/gnucash/src/report/standard-reports
+ligne 358
+style "total-number-cell"
+gnc:html-table-display-budget-columns!
+
+d'ou sort le style "total-number-cell" ?
+il est passé à la fonction gnc:html-table-set-cell/tag! qui est définit dans report/report-system/html-table.scm
+
+La feuille de style par défaut est stylesheet-plain.scm
+
+Ligne 338 : on somme la colonne (acct et budget)
+variable de somme : bgt-total et act-total
+
+Cette variable est du type gnc-numeric-zero (voir ligne 250)
+ou du type retourné par la methode gnc-numeric-add 
+elle semble définit ici : src/engine/swig-engine.c
+
+comment ajoute t on un rapport (que l'on crée par copie) ?
+1/ Copier le fichier de report en le renommant dans /home/ydg/project/gnucash/src/report/standard-reports
+2/ Dans le fichier renommé, changé les différentes string ou apparaissent l'ancien nom du rapport
+3/ Refaire le lien symbolique vers le nouveau rapport dans /project/gnucash/src/report/standard-reports/gnucash/report/standard-reports (il s'agit ici d'un rapport standard)
+4/ Regénérer un report-guid uuidgen | sed -e 's/-//g' : http://wiki.gnucash.org/wiki/Translation
+5/ Relancer les automake et configure
+
+------------------------------------------------------------------------------
+Bug https://bugzilla.gnome.org/show_bug.cgi?id=623467
+
+
+Pour charger slib dans guile :
+$ guile
+guile> (use-modules (ice-9 slib))
+guile> (slib:report-version)
+SLIB "3b1" on guile "1.8.7" on unix 
+guile> 
+
+Dans la doc slib au §2.5.2 :
+The following procedures were present in Scheme until R4RS (see Section “Language
+changes ” in Revised(4) Scheme). They are provided by all SLIB implementations.
+
+t Defined as #t.
+
+Dans le fichier Template.scm : 
+(define t #t)
+
+Revision : 
+r19062  	r19148  
+
+Text
+
+In revision 19148 of budget.scm line "(use-modules (ice-9 slib))" was retrieved.
+slib provide backward compatibility with old scheme R4RS (Cf. slib doc §2.5.2 :
+"The following procedures were present in Scheme until R4RS (see Section “Language
+changes ” in Revised(4) Scheme). They are provided by all SLIB implementations.
+
+t Defined as #t.")
+
+I dont understand precisely the goal of correction in 19148, but changing line "(t" by "(#t" (two occurences in budget.scm and nowhere else if my 'greps' are OK) should be the simplest fix.
+
+Code below to check
+ 
+
+$ export GUILE_LOAD_PATH=/home/ydg/unstable/gnucash/share/gnucash/guile-modules
+$ guile
+guile> %load-path
+("/home/ydg/unstable/gnucash/share/gnucash/guile-modules" "/usr/share/guile/site" "/usr/share/guile/1.8" "/usr/share/guile")
+guile> t
+ERROR: Unbound variable: t
+ABORT: (unbound-variable)
+guile> (use-modules (gnucash printf)) <-- added in r19062 budget.scm
+guile> t
+ERROR: Unbound variable: t
+ABORT: (unbound-variable)
+guile> (use-modules (ice-9 slib)) <-- deleted in r19148 budget.scm
+guile> t
+#t
+guile> 
+
+-------------------------------------------------------------------------------
+installation des dépendances (librairie)
+
+sudo apt-get build-dep gnucash 
+En cas pb avec slib : http://wiki.gnucash.org/wiki/Building#slib_Issues
+
+-------------------------------------------------------------------------------
+installation des outils de construction
+
+sudo apt-get install build-essential devscripts
+
+-------------------------------------------------------------------------------
+glossaire anglais
+
+ledger :
+book (QofBook) : dataset
+
+-------------------------------------------------------------------------------
+récupérer les sources
+
+svn checkout http://svn.gnucash.org/repo/gnucash/trunk gnucash
+-------------------------------------------------------------------------------
+un patch
+
+si pas de fichier ajouté
+svn diff > /tmp/mypatch
+
+sinon
+svn  -urN dir_ref dir_mydev > /tmp/mypatch
+-------------------------------------------------------------------------------
+build
+ 
+mkdir -p $HOME/unstable $HOME/development
+rm -rf $HOME/unstable/gnucash $HOME/development/gnucash
+cd $HOME/development
+svn checkout http://svn.gnucash.org/repo/gnucash/trunk gnucash 
+cd gnucash 
+./autogen.sh 
+./configure --prefix=$HOME/unstable/gnucash --enable-debug --enable-doxygen --enable-error-on-warning --enable-compile-warnings
+make all install
+
+
+
+
+
