@@ -1,0 +1,6 @@
+# si le JRE est perdu
+# cd /usr/local/moneydance
+# sudo ln -s /usr/lib/jvm/default-java jre
+cd /usr/local/moneydance
+./moneydance $1
+

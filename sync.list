@@ -1,0 +1,17 @@
+# user:share-point:local-folder:source-folder-name:local-link-to-folder
+# DG Folder
+#ydg:DG:x:art-work.master:~/art-work
+ydg:DG:x:bank.master:~/bank
+ydg:DG:x:doc.master:~/doc
+ydg:DG:x:doc_w.master:~/doc_w
+ydg:DG:x:infos & adresses.master:~/infos_adresses
+ydg:DG:x:install.master:~/install
+ydg:DG:x:library.master:~/library
+ydg:DG:x:library_w.master:~/library_w
+ydg:DG:x:mail_w.master:~/mail
+# Family Folder
+#family:Family:z:Photos:~/Photos
+#family:Family:z:Music:~/Mp3
+family:Family:z:scans:~/scans
+family:Family:z:doc gestion:~/doc_f
+family:Family:z:COMPTES:~/bank_f

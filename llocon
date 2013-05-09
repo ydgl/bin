@@ -1,0 +1,9 @@
+#!/bin/sh
+cd $HOME/bin/rsync
+
+if [ "$1" = "" ]; then
+  ./localMode.sh stop ../sync.list 
+  ./localMode.sh start ../sync.list 
+fi
+
+

@@ -1,0 +1,12 @@
+#!/bin/sh
+cd $HOME/bin/rsync
+
+if [ -d /media/DATA_ASUS/distcache ]; then
+  #if [ -h $HOME/doc ]; then
+  #  echo "les liens sont déjà présents"
+  #else
+    ./distMode.sh -d -n 0 ../sync.list /media/DATA_ASUS/distcache
+  #fi
+else
+  echo "monter le disque DATA_ASUS"
+fi

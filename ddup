@@ -1,0 +1,9 @@
+#!/bin/sh
+cd $HOME/bin/rsync
+
+if [ -d /media/DATA_ASUS/distcache ]; then
+    ./distMode.sh -d -n "-1" ../sync.list /media/DATA_ASUS/distcache
+    ./distClean.sh ../sync.list
+else
+  echo "monter le disque DATA_ASUS"
+fi
