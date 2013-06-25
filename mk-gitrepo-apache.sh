@@ -19,7 +19,6 @@ read -p "Enter repository name: " project_repo
 
 mkdir -p $TMPDIR
 
-
 # ___________________________________________________________________________
 step 1.CREATE GIT REPOSITORY
 cd $GIT_DOCROOT
@@ -28,9 +27,12 @@ cd $project_repo.git
 sudo git --bare init 
 sudo cp hooks/post-update.sample hooks/post-update
 cd $GIT_DOCROOT
-sudo chown -R _www:_www $project_repo.git
+# Useless as $GIT_DOCROOT is mounted via nfs
+# sudo chown -R _www:_www $project_repo.git
 cd $project_repo.git
-sudo -u _www ./hooks/post-update
+# Useless as $GIT_DOCROOT is mounted via nfs
+# sudo -u _www ./hooks/post-update
+sudo ./hooks/post-update
 sudo git --bare update-server-info
 
 # ___________________________________________________________________________
