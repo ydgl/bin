@@ -9,6 +9,7 @@ Essayer de mettre en dernier tag un tag de date comme ci-dessus qui correspond
 
 Pour parcourir : search sur le motif '^---
 
+
 ------------------------------------------------------------------------------
 #COMPTE #USER #UTILISATEUR
 ------------------------------------------------------------------------------
@@ -42,6 +43,29 @@ Pour récuperer des mails de google depuis thunderbird
 3/ un fois le compte google synchroniser, faire un copier coller des mail dans le répertoire cible d'archive
 4/ demander la suppression des mail dans la source.
 5/ aller dans google mail et vider la poubelle.
+
+Pour exporter ses mail en EML depuis thunderbird
+1/ Ouvrir thunderbird
+2/ Créer un dossier par année
+3/ Faire "exporter tous les mails au format EML"
+
+Pour récuperer les ancien mail au format sbd ou sbf de thunderbird voir internet
+http://forums.mozillazine.org/viewtopic.php?f=39&t=1275035
+
+Procédure de gestion des mails perso
+1/ Tous les mails de plus de 7 ans sont archivés au format EML
+  (ils ne sont plus dans thunderbird)
+2/ Pour les message entre aujourd'hui et 7 ans il peuvent être dans le mailer
+(gmail) ou dans thunderbid au choix. Attention à postfixer les folder dans 
+thunderbird quand il s'agit du mail perso.
+3/ Le fait qu'il s'agisse du mail perso ne veut pas dire que l'on y trouve pas
+des conversation de boulot. Cela permet juste d'écluser un peu. Il faut 
+reconnaitre que des perso trés consistent sont au milieu de newsletter à la con
+... mais c'est aussi une réalité. Tous ces moments là se perdent dans le temps comme les larmes dans la pluie (comme dit le film).
+
+
+RAF :
+- Comment on transforme en EML des fichiers de outlook
 
 ------------------------------------------------------------------------------
 #FSTAB / #MOUNT
@@ -621,7 +645,7 @@ Liens :
 http://lea-linux.org/pho/read/6/308398		
 
 ------------------------------------------------------------------------------
-#APACHE_GIT #HTTPS #SERVEUR_GIT
+#APACHE_GIT #HTTPS #SERVEUR_GIT #201305
 ------------------------------------------------------------------------------
 
 Description du serveur apache installé sur le mac qui est un repository git
@@ -629,7 +653,7 @@ servit en HTTPS avec une authorité de certification perso. Pour voir les
 commande plutôt spécifique à git voir le tag #GIT
 
 Archi :
-- User git sur le mac et sur le NAS avec le même MDP
+- User git sur le NAS pour stocker les repository
 - Git est installé sur le MAC via packet récupéré sur internet
 - J'utilise pas gitolite car c'est un outil adapté à la gestion de plusieurs
   utilisateurs. Dans mon cas un voire deux utilisateurs sont suffisant.
@@ -640,7 +664,7 @@ Archi :
 - Le repository est sur le NAS, le montage est en NFS. 
 
 Mémo / Notes / URL / Doc :
-- Le chapite 4 du book ici : http://git-scm.com/book décrit tout les serveurs possible
+- Le chapite 4 du book ici : http://git-scm.com/book décrit tous les serveurs possible
 - Pour créer un server GIT il y a plusieurs manière de faire. La plus simple pour un nombre limité de personne est d'utiliser git sur SSH. Dans des configurations plus compliqué des solutions comme gitolite ou gitosis sont plus adapté. 
 - Pour faire un server git il faut créer un user système adqéquate (souvent "git") sur le server. Pour des raisons de sécurité ce user peut disposer d'un shell particulier "git-shell" qui limite les possibilités.
 - Le mot de passe de l'AC est level3 sinon level2 sur git-ydg 
@@ -648,18 +672,18 @@ Mémo / Notes / URL / Doc :
 - Le montage via AFP semble pas simple en ligne de commande classique, il recommande dans quelques posts de passer par des script apple dédié (apple script, fichier plist, etc...), voici un post trés détaillé sur le sujet http://www.gregwillits.ws/articles/using_launchd_to_mount_afp_share_point_upon_startup. J'ai donc pris NFS pour un montage interne c'est trés bien.
 
 
-Procédure pour configurer le serveur il y a un shell qui fait du pas à pas pour configureur le serveur apache sur mac osx 10.6
-1. se logguer sur le serveur
+Procédure pour configurer le serveur apache il y a un shell script qui fait du pas à pas (mac osx 10.6)
+1. ssh ydg@mac-adg.local 
 2. cd bin
 3. ./mk-https-osx.sh
 
 Procédure pour créer un repository
-1. se logguer sur le mac
+1. ssh ydg@mac-adg.local 
 2. cd bin
 3. ./mk-gitrepo-apache.sh
 
 Procédure pour A/R le serveur
-1. se logguer sur le mac
+1. ssh ydg@mac-adg.local 
 2. cd bin
 3. ./restartgit.sh
 
@@ -677,22 +701,25 @@ $ git --bare init
 
 
 RAF :
-Clarifier la solution (figer les conf, les répertoire)
-Documenter
-mk-gitrepo-apache.sh : refaire le script de création de repository avec la nouvelle conig apache, le tester
-changer les mdp git
+changer les mdp git (supprimer le user git sur mac)
 
 
 ------------------------------------------------------------------------------
-#GIT #DEVELOPPEMENT
+#GIT #DEVELOPPEMENT #201305
 -----------------------------------------------------------------------------
 
-Pour récuperer ce repository en local
-- La première fois
+Les commandes de base pour bosser avec un serveur git
+- Pour récupérer une branche la première fois
 $ git clone https://ydg@git-ydg/gp/mydemoproject.git
 
-Pour pousser une branche local dans le distant
+- Pour pousser une branche local dans le distant
 $ git push origin master
+
+- Pour mettre à jour le local depuis le distant (fetch+merge)
+$ git pull origin 
+
+- Pour avoir une copie en local du repo distant (sans merge)
+$ git fetch origin 
 
 Pour stocker le mot de passe git en local
 vi ~/.netrc
@@ -711,7 +738,7 @@ $ export GIT_SSL_NO_VERIFY=true
 
 
 ------------------------------------------------------------------------------
-#MAC OS X
+#MAC OS X #201305
 -----------------------------------------------------------------------------
 Ajout d'un utilisateur : passer par l'interface graphique. Les commandes disponible sur le net ne marche pas forcément. Elles sont spécifique à l'OS et sa version.
 
@@ -722,8 +749,7 @@ sw_vers -productVersion
 #SSH
 -----------------------------------------------------------------------------
 
-Pour installer des connexion dans mdp
-
+Pour installer des connexions sans mdp vers le NAS
 
 cd
 ssh-keygen -t rsa
@@ -731,5 +757,11 @@ ssh root@<server> mkdir -p .ssh
 ssh root@<server> chmod -R 700 .ssh
 cat .ssh/id_rsa.pub "|" ssh root@<server> 'cat >> .ssh/authorized_keys'
 
-Y64--ydg
+------------------------------------------------------------------------------
+#RSYNC #SYNC #LODIS
+-----------------------------------------------------------------------------
 
+LODIS : LOcal DIstant Synchronization
+
+Pour les infos, l'install, le TODO voir le fichier dans le répertoire de RSYNC
+README.txt
