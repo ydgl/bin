@@ -3,18 +3,19 @@
 . ./rsync.src
 
 if [ "$1" = "" ]; then
-    echo "usage : distSync.sh <synclist> <distcacheprefix> <master|local> [del]"
-    echo " synchronize list of directories with rsync to local cache (master)"
-    echo "  or local cache is synchronized to central repository"
+    echo "usage : synCache.sh <synclist> <distcacheprefix> <master|local> [del]"
+    echo " synchronize list of directories with rsync in two ways "
+    echo "     local cache --> master server"
+    echo "  or local cache <-- master server"
     echo " options : synclist list of directory to sync"
-    echo "           distcacheprefix prefix to local cache"
+    echo "           distcacheprefix local cache directory"
     echo "           master source is master (master --> local)"
     echo "           local source is local (local --> master)"
     echo "           del : file removed in source are deleted in destination"
     echo " examples :"
-    echo "    ./distSync ~/sync.list /media/DATA_ASUS/distcache master del"
-    echo "    ./distSync ~/sync.list /media/DATA_ASUS/distcache local del"
-    echo "    ./distSync ~/sync.list /cygdrive/d/distcache local del"
+    echo "    ./synCache ~/sync.list /media/DATA_ASUS/distcache master del"
+    echo "    ./synCache ~/sync.list /media/DATA_ASUS/distcache local del"
+    echo "    ./synCache ~/sync.list /cygdrive/d/distcache local del"
     exit 
 fi
 

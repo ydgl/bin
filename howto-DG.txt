@@ -155,6 +155,14 @@ j'obtiens une erreur du style "::1" host unknown, ceci montre que postrges se co
 sur le hosts en ipv6.
 
 ------------------------------------------------------------------------------
+#RUBY 
+------------------------------------------------------------------------------
+installation de ruby via rvm
+voir https://rvm.io
+
+source /home/ydg/.rvm/scripts/rvm
+
+------------------------------------------------------------------------------
 #APACHE / #WEB 
 ------------------------------------------------------------------------------
 
@@ -277,16 +285,17 @@ Voir le desktop : ctrl+alt+d
 
 
 ------------------------------------------------------------------------------
-#WINDOWSMANAGER / #LIGHTDM
+#DISPLAYMANAGER / #LIGHTDM
 ------------------------------------------------------------------------------
 
+Il ne faut pas confondre "display manager" et "window manager"
 Sur ubuntu le gestionnaire de la page de login s'appelle lightdm.
 
 Voir : http://doc.ubuntu-fr.org/lightdm
 
 
 ------------------------------------------------------------------------------
-#WINDOWSMANAGER / #XFCE
+#WINDOWMANAGER / #XFCE
 ------------------------------------------------------------------------------
 
 Si pas de bordure : il faut lancer le windows manager
@@ -294,7 +303,7 @@ Si pas de bordure : il faut lancer le windows manager
 
 
 ------------------------------------------------------------------------------
-#WINDOWSMANAGER / #COMPIZ
+#WINDOWMANAGER / #COMPIZ
 ------------------------------------------------------------------------------
 
 unity2D : utilise metacity comme window manager
@@ -389,7 +398,7 @@ rmdir ~/.local/share/totem
 
 
 ------------------------------------------------------------------------------
-#AVI #VIDEO #DVD
+#AVI #VIDEO #DVD #RIP
 ------------------------------------------------------------------------------
 
 Ripper un DVD : 
@@ -400,6 +409,76 @@ Ripper un DVD :
 3/ Extraire le fichier au format mkv avec ogmrip en lui demanddant de copier le DVD
 4/ Convertir au format souhaité avec mencoder (un morceau de mplayer)
 mencoder -oac mp3lame -lameopts cbr=256  -ovc xvid -xvidencopts bitrate=900 HUNTERS_D7_PAL.mkv -o nom_du_fichier_final.avi
+
+# test d'encodage de chihiro le 180713
+mencoder -oac mp3lame -lameopts cbr=256  -ovc xvid -xvidencopts bitrate=900 -o test.mkv VTS_01_4.VOB VTS_01_5.VOB
+il y a une autre ripper http://doc.ubuntu-fr.org/handbrake
+
+pour avoir des infos sur une VOB
+mplayer -identify <fichier> affiche des information sur la fichier
+
+pour lire la bonne piste audio de la VOB:
+mplayer -aid <numéro de la piste audio> <fichier>
+
+
+pour connaitre la taille des bandes noires (et pour les cropper après)
+mplayer monfilm.avi -vf cropdetect 
+
+pour supprimer les soustitres
+mplayer -nosub -aid 129 VTS_01_1.VOB
+
+mencoder -oac mp3lame -lameopts cbr=256  -ovc xvid -xvidencopts bitrate=900 -o test.mkv -nosub -aid 129 VTS_01_1.VOB VTS_01_2.VOB VTS_01_3.VOB VTS_01_4.VOB VTS_01_5.VOB VTS_01_6.VOB VTS_01_7.VOB 
+
+Pour copier les infos d'une VOB dans une destination
+  par contre je constate que le son et l'image sont décalé
+mencoder -oac copy  -ovc copy -o test2.mkv -nosub -aid 129 VTS_01_1.VOB VTS_01_2.VOB VTS_01_3.VOB VTS_01_4.VOB VTS_01_5.VOB VTS_01_6.VOB VTS_01_7.VOB 
+
+WE du 27-28 juillet
+aussi surprenant que cela puisse paraitre l'utilisation de cat sur des VOB semble OK
+cat vob1 vob2 > vob12
+
+
+Il faut jouer le film en activant le desentrelacement mais avec quel méthode.
+J'ai l'impression que l'option "-vf yadif" donne de bon résultat
+mencoder -oac mp3lame -lameopts cbr=256 -vf yadif -ovc xvid -xvidencopts bitrate=1152 -o test3.mkv -nosub -aid 129 VTS_01_1.VOB
+
+Le fichier source a sans doute été aussi beaucoup endommagé par le padding de mac the ripper. Il faudrait utiliser une autre solution pour ripper la source et sur ubuntu : handbrake.fr. 
+
+
+Les trames semblent être comme suit
+25 images par seconde
+01 T01 image
+02 T01 interpolation
+03 T02 img
+04 T02 it
+05 T02 img
+06 T03 it
+07 T03 img
+08 T04 it
+09 T04 img
+10 T04 it
+11 T05 img
+12 T05 it
+13 T06 img
+14 T06 it
+15 T06 img
+16 T07 it
+17 T07 img
+18 T08 it
+19 T08 img
+20 T08 it
+21 T09 img
+22 T09 it
+23 T10 img
+24 T10 it
+25 T10 img
+...
+
+Pour des raisons bizarre 
+mplayer -dumpstream dvd://1 -aid 129 -nosub -dumpfile toto.vob
+
+plante (fait un core dump) alors que je lis le DVD normalement.
+
 
 
 ------------------------------------------------------------------------------
@@ -415,6 +494,8 @@ Faire des copier / coller (de base)
 Couper C-w             kill-region (between cursor and mark)
 Coller C-y             yank (i.e., insert text last killed)
 Copier M-w	       (M = alt)
+Undo   C-_             ou C-x u
+Search C-s             Pour la recherche en avant et le suivant
 Note : il est possible d'activer les raccourcis classiques (CTRL+C/X/V)
 
 
@@ -765,3 +846,20 @@ LODIS : LOcal DIstant Synchronization
 
 Pour les infos, l'install, le TODO voir le fichier dans le répertoire de RSYNC
 README.txt
+
+------------------------------------------------------------------------------
+#WINDOWMANAGER
+-----------------------------------------------------------------------------
+
+Définition de quelques termes jamais expliqués
+
+Voir : http://en.wikipedia.org/wiki/File:Schema_of_the_layers_of_the_graphical_user_interface.svg
+
+Window Manager : Gestionnaire des fenêtres, donc on trouve les décorations des fenêtres, le layout
+
+Display Manager : Gestionnaire des écrans, donc on trouve la fenêtre de login
+
+
+X Serveur : C'est un serveur de display. Ceci impose un client (x client), il est appelé xterm (ce n'est pas une fenêtre shell).
+
+
