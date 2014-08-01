@@ -11,15 +11,15 @@ if [ "$1" = "" ]; then
 fi
 
 
-for i ; do
+for i in "$*" ; do
 
   if [ "$MASTER" == "" ]; then
-    MASTER=$i
+    MASTER="$i"
     echo "mkdir $MASTER"
-    mkdir -p $MASTER
+    mkdir -p "$MASTER"
   else
     echo "$i --> $MASTER"
-    rsync -urt --progress "$i/" $MASTER
+    rsync -urt --progress "$i/" "$MASTER"
     
   fi
 
