@@ -36,7 +36,11 @@ while [ $iMount -le 2 ] && [ `ls $DSTDIR | wc -l` == 0 ]
 do
   echo mount $DSTDIR try $iMount
   # On mac os NFS mount often fail first time,and workaround did not work for me
-  sudo mount -t nfs -o proto=tcp,port=2049 nas-adg.local:/nfs/Backup $DSTDIR
+  if [ "$OSENV" = "Darwin" ]; then
+    sudo mount -t nfs -o proto=tcp,port=2049,noowners nas-adg.local:/nfs/Backup $DSTDIR
+  else
+    sudo mount -t nfs -o proto=tcp,port=2049 nas-adg.local:/nfs/Backup $DSTDIR
+  fi
   sleep 3
   (( iMount++ ))
 done
