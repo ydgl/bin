@@ -37,7 +37,8 @@ do
   echo mount $DSTDIR try $iMount
   # On mac os NFS mount often fail first time,and workaround did not work for me
   if [ "$OSENV" = "Darwin" ]; then
-    sudo mount -t nfs -o proto=tcp,port=2049,noowners nas-adg.local:/nfs/Backup $DSTDIR
+    mount -t smbfs //guest:@nas-adg.local/Backup $DSTDIR
+    #sudo mount -t nfs -o proto=tcp,port=2049,noowners nas-adg.local:/nfs/Backup $DSTDIR
   else
     sudo mount -t nfs -o proto=tcp,port=2049 nas-adg.local:/nfs/Backup $DSTDIR
   fi
