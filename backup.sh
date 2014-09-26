@@ -46,7 +46,11 @@ do
   (( iMount++ ))
 done
 
-rsync -a --progress --stats --delete $SRCDIR/DOC $DSTDIR
+rsync -a --progress --stats --delete $SRCDIR/DOC/Family $DSTDIR/DOC
+rsync -a --progress --stats --delete $SRCDIR/DOC/DG $DSTDIR/DOC
+rsync -a --progress --stats --delete $SRCDIR/DOC/Arabelle $DSTDIR/DOC
+rsync -a --progress --stats --delete $SRCDIR/DOC/Partage $DSTDIR/DOC
+rsync -a --progress --stats --delete $SRCDIR/DOC/Partage_ext $DSTDIR/DOC
 #rsync -a --progress --stats --delete $SRCDIR $DSTDIR
 #rsync -a --progress --stats --delete $SRCDIR $DSTDIR
 
