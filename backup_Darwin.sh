@@ -5,10 +5,10 @@ BACKUP_TMP_WORKDIR=$HOME/_running_backup
 SRCDIR="$BACKUP_TMP_WORKDIR/src"
 DSTDIR="$BACKUP_TMP_WORKDIR/dst"
 
-echo $PATH
 PATH=$PATH:/sbin
 
-
+# Crontab :
+# 0 4 * * * /Users/admin/bin/backup_Darwin.sh &> /Users/admin/backup_Darwin.log
 
 # $1 : mount command
 # $2 : mount point
@@ -74,10 +74,15 @@ d=$?
 if [ $(( d + s )) -eq 0 ]
 then
   echo "start sync at `date`"
+  echo Sync $SRCDIR/DOC/Family
   rsync -a --progress --stats --delete $SRCDIR/DOC/Family $DSTDIR/DOC
+  echo Sync $SRCDIR/DOC/DG
   rsync -a --progress --stats --delete $SRCDIR/DOC/DG $DSTDIR/DOC
+  echo Sync $SRCDIR/DOC/Arabelle
   rsync -a --progress --stats --delete $SRCDIR/DOC/Arabelle $DSTDIR/DOC
+  echo Sync $SRCDIR/DOC/Partage
   rsync -a --progress --stats --delete $SRCDIR/DOC/Partage $DSTDIR/DOC
+  echo Sync $SRCDIR/DOC/Partage_ext
   rsync -a --progress --stats --delete $SRCDIR/DOC/Partage_ext $DSTDIR/DOC
   echo "end sync at `date`"
 else
