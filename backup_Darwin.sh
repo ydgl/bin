@@ -84,6 +84,8 @@ then
   rsync -a --progress --stats --delete $SRCDIR/DOC/Partage $DSTDIR/DOC
   echo Sync $SRCDIR/DOC/Partage_ext
   rsync -a --progress --stats --delete $SRCDIR/DOC/Partage_ext $DSTDIR/DOC
+  echo Sync $SRCDIR/FILMS/1-DESSINS ANIMES
+  rsync -a --progress --stats --delete $SRCDIR/FILMS/1-DESSINS_ANIMES $DSTDIR/FILMS
   echo "end sync at `date`"
 else
   echo "No sync : fail to mount one of the two directories"
