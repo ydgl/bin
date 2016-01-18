@@ -68,6 +68,13 @@ RAF :
 - Comment on transforme en EML des fichiers de outlook
 
 ------------------------------------------------------------------------------
+#ENCFS / #CRYPTO
+------------------------------------------------------------------------------
+
+To create a crypted file system, or to access
+encfs -v -f /.../.foo /.../foo
+
+------------------------------------------------------------------------------
 #FSTAB / #MOUNT
 ------------------------------------------------------------------------------
 
@@ -644,9 +651,14 @@ Config
                     * linux-restricted-modules-version_de_votre_noyau 
                 4- dans un shell sudo nvidia-xconfig
 
+-----------------------------------------------------------------------------
+#ISO #MOUNT 
+-----------------------------------------------------------------------------
+
 	Pb : Monter un iso
 	correction : 
                 sudo mount -t iso9660 -o ro,loop ./the_fountain_dvdr-ct.img /home/ydg/iso
+
 -----------------------------------------------------------------------------
 #MAIL #GOLGOTH13
 -----------------------------------------------------------------------------
@@ -736,6 +748,14 @@ chipset JMB363
 ________________________________________________________________________________
 Liens :
 http://lea-linux.org/pho/read/6/308398		
+
+------------------------------------------------------------------------------
+#TAR #ZIP
+------------------------------------------------------------------------------
+Pour extraire un tgz :
+tar xvzf <file>.tgz
+tar xvzf <file>.tar.gz
+tar xvjf <file>.tar.bz2
 
 ------------------------------------------------------------------------------
 #APACHE_GIT #HTTPS #SERVEUR_GIT #201305
@@ -839,6 +859,12 @@ Pour connaitre la version de l'os MAC OSX
 sw_vers -productVersion
 
 ------------------------------------------------------------------------------
+#BASH #EXPORT #20141006
+-----------------------------------------------------------------------------
+Si on veut ajouter des variable d'env en export sur ubuntu, il faut 
+les ajouter dans .profile ... et ensuite il faut se logguer et se relogguer.
+
+------------------------------------------------------------------------------
 #SSH
 -----------------------------------------------------------------------------
 
@@ -873,5 +899,3 @@ Display Manager : Gestionnaire des écrans, donc on trouve la fenêtre de login
 
 
 X Serveur : C'est un serveur de display. Ceci impose un client (x client), il est appelé xterm (ce n'est pas une fenêtre shell).
-
-
