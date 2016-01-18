@@ -482,7 +482,7 @@ plante (fait un core dump) alors que je lis le DVD normalement.
 
 
 ------------------------------------------------------------------------------
-#EMACS
+#EMACS #20140928 
 ------------------------------------------------------------------------------
 
 Pour supprimer la fenêtre d'aide C-X C-1
@@ -496,6 +496,18 @@ Coller C-y             yank (i.e., insert text last killed)
 Copier M-w	       (M = alt)
 Undo   C-_             ou C-x u
 Search C-s             Pour la recherche en avant et le suivant
+
+Sélectionner des morceaux de text
+1/ Poser une marque sur une extrémté du texte : C-<spc>
+2/ Positionner le curseur sur l'autre extrémité
+3/ C-w (pour effacer)
+
+Goto line M-g-g  
+
+Supprimer le fichier de backup
+Dans ~/.emacs entrer :
+(setq make-backup-files nil)
+
 Note : il est possible d'activer les raccourcis classiques (CTRL+C/X/V)
 
 
