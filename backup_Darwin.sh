@@ -3,7 +3,11 @@
 
 BACKUP_TMP_WORKDIR=$HOME/_running_backup
 SRCDIR="$BACKUP_TMP_WORKDIR/src"
-DSTDIR="$BACKUP_TMP_WORKDIR/dst"
+#DSTDIR="$BACKUP_TMP_WORKDIR/dst"
+DSTDIR="/Volumes/PLASTIK_IV"
+SRC_MOUNT_COMMAND="mount -t smbfs //guest:@mafreebox.free.fr/PLASTIK_III/"
+DST_MOUNT_COMMAND="mount -t smbfs //guest:@nas-adg.local/Backup"
+
 
 PATH=$PATH:/sbin
 
@@ -16,6 +20,8 @@ function trymount {
   retval=0
   iMount=1
 
+
+  mkdir -p $2
 
   while [ $iMount -le 2 ] && [ `ls $2 | wc -l` == 0 ]
   do
@@ -33,6 +39,15 @@ function trymount {
 
   return $retval
 }
+
+
+function tryumount {
+    umount $1
+    echo "waiting for unmount ..."
+    sleep 10
+    rmdir $1
+}
+
 
 
 if [ `uname` != "Darwin" ] 
@@ -56,52 +71,44 @@ then
     #if [ $? -ne 0 ] then exit fi
 else
     echo "Backup is already running"
+    exit
 fi
-
-echo "create mount dir ..."
-mkdir -p $SRCDIR
-mkdir -p $DSTDIR
-
 
 
 # Mount & and sync if mounts succeed ___________________________________
 
-trymount "mount -t smbfs //guest:@mafreebox.free.fr/PLASTIK_III/" "$SRCDIR"
+trymount "$SRC_MOUNT_COMMAND" "$SRCDIR"
 s=$?
-trymount "mount -t smbfs //guest:@nas-adg.local/Backup" "$DSTDIR"
+#trymount "$DST_MOUNT_COMMAND" "$DSTDIR"
 d=$?
+
 
 if [ $(( d + s )) -eq 0 ]
 then
   echo "start sync at `date`"
   echo Sync $SRCDIR/DOC/Family
   rsync -a --progress --stats --delete $SRCDIR/DOC/Family $DSTDIR/DOC
-  echo Sync $SRCDIR/DOC/DG
-  rsync -a --progress --stats --delete $SRCDIR/DOC/DG $DSTDIR/DOC
-  echo Sync $SRCDIR/DOC/Arabelle
-  rsync -a --progress --stats --delete $SRCDIR/DOC/Arabelle $DSTDIR/DOC
-  echo Sync $SRCDIR/DOC/Partage
-  rsync -a --progress --stats --delete $SRCDIR/DOC/Partage $DSTDIR/DOC
-  echo Sync $SRCDIR/DOC/Partage_ext
-  rsync -a --progress --stats --delete $SRCDIR/DOC/Partage_ext $DSTDIR/DOC
-  echo Sync $SRCDIR/FILMS/1-DESSINS ANIMES
-  rsync -a --progress --stats --delete $SRCDIR/FILMS/1-DESSINS_ANIMES $DSTDIR/FILMS
-  echo "end sync at `date`"
+  #echo Sync $SRCDIR/DOC/DG
+  #rsync -a --progress --stats --delete $SRCDIR/DOC/DG $DSTDIR/DOC
+  #echo Sync $SRCDIR/DOC/Arabelle
+  #rsync -a --progress --stats --delete $SRCDIR/DOC/Arabelle $DSTDIR/DOC
+  #echo Sync $SRCDIR/DOC/Partage
+  #rsync -a --progress --stats --delete $SRCDIR/DOC/Partage $DSTDIR/DOC
+  #echo Sync $SRCDIR/DOC/Partage_ext
+  #rsync -a --progress --stats --delete $SRCDIR/DOC/Partage_ext $DSTDIR/DOC
+  #echo Sync $SRCDIR/FILMS/1-DESSINS ANIMES
+  #rsync -a --progress --stats --delete $SRCDIR/FILMS/1-DESSINS_ANIMES $DSTDIR/FILMS
+  #echo "end sync at `date`"
 else
   echo "No sync : fail to mount one of the two directories"
 fi
 
 # Unmount , clean and exit ___________________________________________
 echo  "unmounting ..."
-umount $SRCDIR
-umount $DSTDIR
+tryumount $SRCDIR
+#tryumount $DSTDIR
 
-echo "waiting for unmount ..."
-sleep 10
-  
-echo "cleaning ..."
-rmdir $DSTDIR
-rmdir $SRCDIR
 rmdir $BACKUP_TMP_WORKDIR
 
 echo  end batch at `date`
+
