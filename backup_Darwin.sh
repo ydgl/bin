@@ -1,9 +1,6 @@
 #!/bin/bash
-# Use zsh to support multidimensionnal arrays on mac os x 10.8 (bash 3 only)
-
 
 BACKUP_TMP_WORKDIR=$HOME/_running_backup
-
 SRCDIR="$BACKUP_TMP_WORKDIR/src"
 SRC_MOUNT_COMMAND="mount -t smbfs //guest:@mafreebox.free.fr/PLASTIK_III/"
 
@@ -93,7 +90,8 @@ then
   echo "start sync at `date`"
   mysync "$SRCDIR/DOC/Family" "$DSTDIR/DOC"
   mysync "$SRCDIR/DOC/Arabelle" "$DSTDIR/DOC"
-  mysync "$SRCDIR/DOC/FILMS/1-DESSSINS_ANIMES" "$DSTDIR/FILMS"
+  mysync "$SRCDIR/DOC/DG" "$DSTDIR/DOC"
+  mysync "$SRCDIR/FILMS/1-DESSSINS_ANIMES" "$DSTDIR/FILMS"
   echo "end sync at `date`"
 else
   echo "No sync : fail to mount one of the two directories"
