@@ -818,7 +818,7 @@ changer les mdp git (supprimer le user git sur mac)
 
 
 ------------------------------------------------------------------------------
-#GIT #DEVELOPPEMENT #201305
+#GIT #DEVELOPPEMENT #201705
 -----------------------------------------------------------------------------
 
 Les commandes de base pour bosser avec un serveur git
@@ -849,10 +849,46 @@ le certificat de la CA : ça fonctionne pas. Un moyen consiste à désactiver
 la vérification pour git en ligne de commande comme suit :
 $ export GIT_SSL_NO_VERIFY=true
 
+Pour le rebase APEC B --> A ___________________________________________________
+
+On souhaite intégrer le code de la branche B dans A (qui est notre branche de dev).
+Ensuite une fois la branche A à jour avec le code de B on merge la branche A dans B.
+
+I/ Mettre à jour les deux repo A et B
+git checkout B
+# on est sur B
+git pull
+git checkout A
+# on est sur A
+git pull
+
+II/ On fait le rebase
+git rebase develop
+
+# le git rebase s'arrête pour laisse la personne gérer les conflits ...
+# Pour résoudre les conflits utiliser les IDE , git add ... / 
+# PAS besoin de commiter les conflits résolut
+
+git rebase --continue
+
+III/ On push sur le repository
+# Lorsque les conflits sont résolus penser à vérifier que depuis le début du merge personne n'a fait de commit
+
+# 1- On fait un mail pour demander de ne plus commiter (car on va faire un push -f)
+
+# 2- On récupère l'état exact de la branche origin
+git fetch 
+
+# 3- On vérifie que origin/<A> et <A> sont idem (que tous les commit qui sont avant origin/<A> sont aussi avant <A>)
+# Si on a des pb à ce niveau : ????
+
+# 4- On push la version que l'on a
+git push --force
+
 
 ------------------------------------------------------------------------------
 #MAC OS X #201305
------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 Ajout d'un utilisateur : passer par l'interface graphique. Les commandes disponible sur le net ne marche pas forcément. Elles sont spécifique à l'OS et sa version.
 
 Pour connaitre la version de l'os MAC OSX
