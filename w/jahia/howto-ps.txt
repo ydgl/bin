@@ -1,0 +1,27 @@
+HOW TO / TIPS ON POWERSHELL FROM UNIX/LINUX
+==============================================================================
+
+Equivalent unix/linux
+
+
+#TAIL
+==============================================================================
+
+>Get-Content -Path "C:\scripts\test.txt" -Wait
+
+Attention ça repart du début
+
+#INPUT #READLINE
+==============================================================================
+
+
+$name = Read-Host 'What is your username?'
+
+
+#EXECUTION #POLICY #SECURITE
+==============================================================================
+
+Pour permettre l'execution en local sans signature
+
+# Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+
