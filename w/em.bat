@@ -1,1 +1,1 @@
-D:\devtools\emacs\bin\runemacs.exe -nw %1 %2 %3 %4 %5 %6 %7
+D:\devtools\emacs\bin\emacs.exe -nw %1 %2 %3 %4 %5 %6 %7
