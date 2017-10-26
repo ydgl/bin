@@ -3,10 +3,17 @@
 # Usage : tr.awk cc.xls
 # date_valeur T montant T support T #Chq T beneficaire si - T beneficaire si +
 # support = rien si bene+
-# bene - = (Rien si support = chèque) | [.CB.. si Carte Sauf TOTAL OPTION SYSTEM' EPARGNE][PRLV. si Virement]+ [RETRAIT DU JJ/MM | TIERS .* JJ/MM/YY] 
+# bene - = (Rien si support = chèque) | [.CB.. si Carte Sauf TOTAL OPTION SYSTEM' EPARGNE][PRLV. si Virement]+ [RETRAIT DU JJ/MM | TIERS .* JJ/MM/YY]
+
+# http://melpa.org/#/getting-started
+# https://github.com/victorhge/iedit
+# Ajouter un outil de renommage de variable
+# Pourquoi le test sur cotisation fonctionne pas ?
 
 function ltrim(s) { sub(/^[ \t\r\n]+/, "", s); return s }
 function rtrim(s) { sub(/[ \t\r\n]+$/, "", s); return s }
+function trim(s)  { return rtrim(ltrim(s)); }
+
 
 BEGIN {
  FS = "\t"
@@ -15,6 +22,7 @@ BEGIN {
  TYPE_TRANSFERT = "Virement"
 
  PAYEE_TOTAL = "TOTAL OPTION SYSTEM' EPARGNE    "
+ PAYEE_COTISATION = "COTISATION MENSUELLE CARTE"
  PAYEE_CARD = " CB  "
  PAYEE_TRANSFERT = "PRLV "
  PAYEE_WITHDRAWAL = " CB  RETRAIT DU  "
@@ -32,34 +40,51 @@ BEGIN {
 	
     tsnDate = valueDate
     payee = payeeExpsense
-	
+    tsnMemo = ""
+
+    check = 0
+    
     if (type == TYPE_CARD) {
-	if (payeeExpsense == PAYEE_TOTAL) {
-	    payee = PAYEE_TOTAL
-	    printf "check  "
-	} else {
-	    if (index(payeeExpsense, PAYEE_WITHDRAWAL) == 1) {
-		dateBegin = substr(payeeExpsense,length(PAYEE_WITHDRAWAL)+1, 5)
-		payee = "RETRAIT"
-		tsnDate = dateBegin strftime("/%Y")
-		printf "check  "
+	switch(payeeExpsense) {
+	    case "PAYEE_TOTAL" : 
+		payee = trim(payeeExpsense)
+		check = 1
+		break;
+		
+	    case /COTISATION.*/ : 
+		payee = trim(payeeExpsense)
+		check = 1
+		break;
+
+		default : 
+		    if (index(payeeExpsense, PAYEE_WITHDRAWAL) == 1) {
+			dateBegin = substr(payeeExpsense,length(PAYEE_WITHDRAWAL)+1, 5)
+			payee = "RETRAIT"
+			tsnDate = dateBegin strftime("/%Y")
+			check = 1
 			
-	    } else {
-		#printf "0 %s\n", payeeExpsense
-		payee = substr(payeeExpsense, length(PAYEE_CARD)+1, length(payeeExpsense)-10-length(PAYEE_CARD))
-		#printf "1 %s du %s\n", payee, tsnDate
-		tsnDate = substr(payeeExpsense, length(payeeExpsense)-9, 5)
-		tsnDate = tsnDate strftime("/%Y")
+		    } else {
+			#printf "0 %s\n", payeeExpsense
+			payee = substr(payeeExpsense, length(PAYEE_CARD)+1, length(payeeExpsense)-10-length(PAYEE_CARD))
+			#printf "1 %s du %s\n", payee, tsnDate
+			tsnDate = substr(payeeExpsense, length(payeeExpsense)-9, 5)
+			tsnDate = tsnDate strftime("/%Y")
 			
-		#payee = sub(/[ ]+$/,"", payee)
-		payee=rtrim(payee)
-		#printf "2 %s du %s\n", payee, tsnDate
-		#printf "Carte pour %s \n", payeeExpsense
-		printf "check  "
-	    }
+			#payee = sub(/[ ]+$/,"", payee)
+			payee=rtrim(payee)
+			#printf "2 %s du %s\n", payee, tsnDate
+			#printf "Carte pour %s \n", payeeExpsense
+			check = 1
+		    }
+		    break
 	}
     }
-    printf "date: %s, montant: %s, tiers: %s\n", tsnDate, amount, payee
+
+    if (check == 1) {
+	printf "date: %s, montant: %s, tiers: %s, memo: %s\n", tsnDate, amount, payee, tsnMemo
+    } else {
+	printf "unprocessed : %s\n", $0
+    }
     # printf "date valeur : %s", $1;
     # printf " / montant : %s", $2;
     # printf " / carte/chèque/virement : %s", $3;
@@ -68,5 +93,4 @@ BEGIN {
     # printf " / bene+ : %s\n", $6;
 	
 }
-
 
