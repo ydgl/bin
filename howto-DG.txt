@@ -489,7 +489,7 @@ plante (fait un core dump) alors que je lis le DVD normalement.
 
 
 ------------------------------------------------------------------------------
-#EMACS #20140928 
+#EMACS #20171026 
 ------------------------------------------------------------------------------
 
 Pour supprimer la fenêtre d'aide C-X C-1
@@ -517,6 +517,18 @@ Dans ~/.emacs entrer :
 
 Note : il est possible d'activer les raccourcis classiques (CTRL+C/X/V)
 
+Outil pour pouvoir refactorer (renommer)
+https://github.com/victorhge/iedit
+1- Télécharger et mettre dans un répertoire
+2- Modifier .emacs (sur windows double antislash)
+	(add-to-list 'load-path "C:\\devtools\\emacs-plugin\\iedit")
+	(require 'iedit)
+  
+Pour forcer l'encodage en UTF-8 (a fonctionné sur windows)
+(set-language-environment "UTF-8")
+
+Bon résumé 
+https://www.johndcook.com/blog/emacs_windows/
 
 ------------------------------------------------------------------------------
 #PHOTO / #SHOTWELL / #PICASA
