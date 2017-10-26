@@ -8,7 +8,6 @@
 # http://melpa.org/#/getting-started
 # https://github.com/victorhge/iedit
 # Ajouter un outil de renommage de variable
-# Pourquoi le test sur cotisation fonctionne pas ?
 
 function ltrim(s) { sub(/^[ \t\r\n]+/, "", s); return s }
 function rtrim(s) { sub(/[ \t\r\n]+$/, "", s); return s }
@@ -35,49 +34,61 @@ BEGIN {
     amount = $2
     type = $3
     checkNum = $4
-    payeeExpsense = $5
+    payeeExpense = $5
     payeeIncome = $6
 	
     tsnDate = valueDate
-    payee = payeeExpsense
+    payee = payeeExpense
     tsnMemo = ""
 
     check = 0
+
+    # printf "analyse : %s\n", $0
+    # printf "date valeur : %s", $1;
+    # printf " / montant : %s", $2;
+    # printf " / carte/chèque/virement : %s", $3;
+    # printf " / #chèque : %s", $4;
+    # printf " / bene- : %s", $5;
+    # printf " / bene+ : %s", $6;
+    # printf "\n"
+
     
     if (type == TYPE_CARD) {
-	switch(payeeExpsense) {
+	switch(payeeExpense) {
 	    case "PAYEE_TOTAL" : 
-		payee = trim(payeeExpsense)
+		payee = trim(payeeExpense)
 		check = 1
 		break;
 		
-	    case /COTISATION.*/ : 
-		payee = trim(payeeExpsense)
-		check = 1
-		break;
 
 		default : 
-		    if (index(payeeExpsense, PAYEE_WITHDRAWAL) == 1) {
-			dateBegin = substr(payeeExpsense,length(PAYEE_WITHDRAWAL)+1, 5)
+		    if (index(payeeExpense, PAYEE_WITHDRAWAL) == 1) {
+			dateBegin = substr(payeeExpense,length(PAYEE_WITHDRAWAL)+1, 5)
 			payee = "RETRAIT"
 			tsnDate = dateBegin strftime("/%Y")
 			check = 1
 			
 		    } else {
-			#printf "0 %s\n", payeeExpsense
-			payee = substr(payeeExpsense, length(PAYEE_CARD)+1, length(payeeExpsense)-10-length(PAYEE_CARD))
+			#printf "0 %s\n", payeeExpense
+			payee = substr(payeeExpense, length(PAYEE_CARD)+1, length(payeeExpense)-10-length(PAYEE_CARD))
 			#printf "1 %s du %s\n", payee, tsnDate
-			tsnDate = substr(payeeExpsense, length(payeeExpsense)-9, 5)
+			tsnDate = substr(payeeExpense, length(payeeExpense)-9, 5)
 			tsnDate = tsnDate strftime("/%Y")
 			
 			#payee = sub(/[ ]+$/,"", payee)
 			payee=rtrim(payee)
 			#printf "2 %s du %s\n", payee, tsnDate
-			#printf "Carte pour %s \n", payeeExpsense
+			#printf "Carte pour %s \n", payeeExpense
 			check = 1
 		    }
 		    break
 	}
+    }
+
+    if ((type == "") && (index(payeeIncome,PAYEE_COTISATION) == 1) ) {
+	payee = trim(payeeIncome)
+	check = 1
+
     }
 
     if (check == 1) {
@@ -85,12 +96,6 @@ BEGIN {
     } else {
 	printf "unprocessed : %s\n", $0
     }
-    # printf "date valeur : %s", $1;
-    # printf " / montant : %s", $2;
-    # printf " / carte/chèque/virement : %s", $3;
-    # printf " / #chèque : %s", $4;
-    # printf " / bene- : %s\n", $5;
-    # printf " / bene+ : %s\n", $6;
 	
 }
 
