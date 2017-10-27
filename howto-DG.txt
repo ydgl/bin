@@ -509,6 +509,10 @@ Sélectionner des morceaux de text
 2/ Positionner le curseur sur l'autre extrémité
 3/ C-w (pour effacer)
 
+Commentaires
+ajouter C-c C-c 
+retirer M-;
+
 Goto line M-g-g  
 
 Supprimer le fichier de backup

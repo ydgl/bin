@@ -10,6 +10,8 @@
 # Ajouter un outil de renommage de variable
 # https://www.johndcook.com/blog/emacs_windows/
 
+# iconv -f ISO-8859-1 -t UTF-8 cc.xls
+
 function ltrim(s) { sub(/^[ \t\r\n]+/, "", s); return s }
 function rtrim(s) { sub(/[ \t\r\n]+$/, "", s); return s }
 function trim(s)  { return rtrim(ltrim(s)); }
@@ -20,9 +22,13 @@ BEGIN {
  TYPE_CHK = "Chèque"
  TYPE_CARD = "Carte"
  TYPE_TRANSFERT = "Virement"
+ TYPE_DEBIT = "Prélèvement"
 
  PAYEE_TOTAL = "TOTAL OPTION SYSTEM' EPARGNE    "
  PAYEE_COTISATION = "COTISATION MENSUELLE CARTE"
+ PAYEE_PRET = "PRET IMMOBILIER ECH"
+ PAYEE_ASSURANCE = "ASSURANCE DECOUVERT AUTORISE"
+
  PAYEE_CARD = " CB  "
  PAYEE_TRANSFERT = "PRLV "
  PAYEE_WITHDRAWAL = " CB  RETRAIT DU  "
@@ -45,13 +51,6 @@ BEGIN {
     check = 0
 
     # printf "analyse : %s\n", $0
-    # printf "date valeur : %s", $1;
-    # printf " / montant : %s", $2;
-    # printf " / carte/chèque/virement : %s", $3;
-    # printf " / #chèque : %s", $4;
-    # printf " / bene- : %s", $5;
-    # printf " / bene+ : %s", $6;
-    # printf "\n"
 
     
     if (type == TYPE_CARD) {
@@ -60,7 +59,7 @@ BEGIN {
 	    tsnPayee = trim(payeeExpense)
 	    check = 1
 	    break;
-		
+
 
 	default : 
 	    if (index(payeeExpense, PAYEE_WITHDRAWAL) == 1) {
@@ -86,16 +85,49 @@ BEGIN {
 	}
     }
 
-    if ((type == "") && (index(payeeIncome,PAYEE_COTISATION) == 1) ) {
-	tsnPayee = trim(payeeIncome)
+    if (type == TYPE_CHK) {
+	tsnMemo = "#"checkNum
+	tsnPayee = "CHEQUE A RENSEIGNER"
 	check = 1
+    }
+
+    if (type == TYPE_TRANSFERT) {
+	tsnPayee = trim(payeeExpense)
+	check = 1
+    }
+    
+    if (type == TYPE_DEBIT) {
+	tsnPayee = trim(payeeExpense)
+	check = 1
+    }
+
+
+    
+    if (type == "") {
+	if (index(payeeIncome,PAYEE_COTISATION) == 1) {
+	    tsnPayee = trim(payeeIncome)
+	    check = 1
+	}
+	if (amount >= 0) {
+	    tsnPayee = trim(payeeIncome)
+	    check = 1
+	}
 
     }
 
+    
     if (check == 1) {
 	printf "date: %s, montant: %s, tiers: %s, memo: %s\n", tsnDate, amount, tsnPayee, tsnMemo
     } else {
 	printf "unprocessed : %s\n", $0
+	printf "date valeur : %s", $1;
+	printf " / montant : %s", $2;
+	printf " / type : %s", $3;
+	printf " / #chèque : %s", $4;
+	printf " / bene- : %s", $5;
+	printf " / bene+ : %s", $6;
+	printf "\n"
+
     }
 	
 }
