@@ -24,7 +24,7 @@ BEGIN {
  TYPE_TRANSFERT = "Virement"
  TYPE_DEBIT = "Prélèvement"
 
- PAYEE_TOTAL = "TOTAL OPTION SYSTEM' EPARGNE    "
+ PAYEE_TOTAL = "TOTAL OPTION SYSTEM' EPARGNE"
  PAYEE_COTISATION = "COTISATION MENSUELLE CARTE"
  PAYEE_PRET = "PRET IMMOBILIER ECH"
  PAYEE_ASSURANCE = "ASSURANCE DECOUVERT AUTORISE"
@@ -34,15 +34,16 @@ BEGIN {
  PAYEE_WITHDRAWAL = " CB  RETRAIT DU  "
 
  printf "set %s\n", PAYEE_TOTAL 
+ printf "Date;Compte;Bénéficiaire;Montant;Catégorie;Mémo / Chq\n"
 } ;
 
 {
-    valueDate = $1
+    valueDate = trim($1)
     amount = $2
     type = $3
     checkNum = $4
-    payeeExpense = $5
-    payeeIncome = $6
+    payeeExpense = trim($5)
+    payeeIncome = trim($6)
 	
     tsnDate = valueDate
     tsnPayee = payeeExpense
@@ -54,9 +55,11 @@ BEGIN {
 
     
     if (type == TYPE_CARD) {
+	    printf "tt rsn .%s. / .%s. = %d", payeeExpense, PAYEE_TOTAL, (payeeExpense == PAYEE_TOTAL)
 	switch(payeeExpense) {
 	case "PAYEE_TOTAL" : 
 	    tsnPayee = trim(payeeExpense)
+	    printf "tsn .%s.", payeeExpense
 	    check = 1
 	    break;
 
@@ -117,7 +120,9 @@ BEGIN {
 
     
     if (check == 1) {
-	printf "date: %s, montant: %s, tiers: %s, memo: %s\n", tsnDate, amount, tsnPayee, tsnMemo
+	#printf "date: %s, montant: %s, tiers: %s, memo: %s\n", tsnDate, amount, tsnPayee, tsnMemo
+	printf "%s;%s;%s;%s;%s;%s\n", tsnDate, "LCL CC", tsnPayee, amount, "", tsnMemo
+
     } else {
 	printf "unprocessed : %s\n", $0
 	printf "date valeur : %s", $1;
