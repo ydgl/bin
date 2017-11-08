@@ -25,15 +25,15 @@ BEGIN {
  TYPE_DEBIT = "Prélèvement"
 
  PAYEE_TOTAL = "TOTAL OPTION SYSTEM' EPARGNE"
+ PAYEE_TOTAL_BGN = "TOTAL OPTION SYSTEM"
  PAYEE_COTISATION = "COTISATION MENSUELLE CARTE"
  PAYEE_PRET = "PRET IMMOBILIER ECH"
  PAYEE_ASSURANCE = "ASSURANCE DECOUVERT AUTORISE"
 
- PAYEE_CARD = " CB  "
+ PAYEE_CARD = "CB  "
  PAYEE_TRANSFERT = "PRLV "
- PAYEE_WITHDRAWAL = " CB  RETRAIT DU  "
+ PAYEE_WITHDRAWAL = "CB  RETRAIT DU  "
 
- printf "set %s\n", PAYEE_TOTAL 
  printf "Date;Compte;Bénéficiaire;Montant;Catégorie;Mémo / Chq\n"
 } ;
 
@@ -51,41 +51,33 @@ BEGIN {
 
     check = 0
 
-    # printf "analyse : %s\n", $0
-
+   # printf "analyse : .%s.\n", $0
     
-    if (type == TYPE_CARD) {
-	    printf "tt rsn .%s. / .%s. = %d", payeeExpense, PAYEE_TOTAL, (payeeExpense == PAYEE_TOTAL)
-	switch(payeeExpense) {
-	case "PAYEE_TOTAL" : 
-	    tsnPayee = trim(payeeExpense)
-	    printf "tsn .%s.", payeeExpense
-	    check = 1
-	    break;
+    if ( (type == TYPE_CARD) &&  (index(payeeExpense, PAYEE_TOTAL_BGN) == 1) ) {
+        tsnPayee = trim(payeeExpense)
+        check = 1
+    }
 
+    if ( (type == TYPE_CARD) &&  (index(payeeExpense, PAYEE_WITHDRAWAL) == 1) ) {
+	dateBegin = substr(payeeExpense,length(payeeExpense)-6, 5)
+	tsnPayee = "RETRAIT"
+	tsnDate = dateBegin strftime("/%Y")
+	check = 1
+			
+    } 
 
-	default : 
-	    if (index(payeeExpense, PAYEE_WITHDRAWAL) == 1) {
-		dateBegin = substr(payeeExpense,length(PAYEE_WITHDRAWAL)+1, 5)
-		tsnPayee = "RETRAIT"
-		tsnDate = dateBegin strftime("/%Y")
-		check = 1
-			
-	    } else {
-		#printf "0 %s\n", payeeExpense
-		tsnPayee = substr(payeeExpense, length(PAYEE_CARD)+1, length(payeeExpense)-10-length(PAYEE_CARD))
-		#printf "1 %s du %s\n", tsnPayee, tsnDate
-		tsnDate = substr(payeeExpense, length(payeeExpense)-9, 5)
-		tsnDate = tsnDate strftime("/%Y")
-			
-		#tsnPayee = sub(/[ ]+$/,"", tsnPayee)
-		tsnPayee=rtrim(tsnPayee)
-		#printf "2 %s du %s\n", tsnPayee, tsnDate
-		#printf "Carte pour %s \n", payeeExpense
-		check = 1
-	    }
-	    break
-	}
+    if ( (type == TYPE_CARD) &&  (index(payeeExpense, PAYEE_CARD) == 1) ) {
+	#printf "0 %s\n", payeeExpense
+	tsnPayee = substr(payeeExpense, length(PAYEE_CARD)+1, length(payeeExpense)-10-length(PAYEE_CARD))
+	#printf "1 %s du %s\n", tsnPayee, tsnDate
+	tsnDate = substr(payeeExpense, length(payeeExpense)-7, 5)
+	tsnDate = tsnDate strftime("/%Y")
+		
+	#tsnPayee = sub(/[ ]+$/,"", tsnPayee)
+	tsnPayee=rtrim(tsnPayee)
+	#printf "2 %s du %s\n", tsnPayee, tsnDate
+	#printf "Carte pour %s \n", payeeExpense
+	check = 1
     }
 
     if (type == TYPE_CHK) {
@@ -115,23 +107,22 @@ BEGIN {
 	    tsnPayee = trim(payeeIncome)
 	    check = 1
 	}
-
     }
 
     
     if (check == 1) {
-	#printf "date: %s, montant: %s, tiers: %s, memo: %s\n", tsnDate, amount, tsnPayee, tsnMemo
-	printf "%s;%s;%s;%s;%s;%s\n", tsnDate, "LCL CC", tsnPayee, amount, "", tsnMemo
-
+	#printf "processed : %s\n", $0;
+        printf "date: %s, montant: %s, tiers: %s, memo: %s, type: %s.\n", tsnDate, amount, tsnPayee, tsnMemo,type
+	#printf "%s;%s;%s;%s;%s;%s\n", tsnDate, "LCL CC", tsnPayee, amount, "", tsnMemo
     } else {
 	printf "unprocessed : %s\n", $0
-	printf "date valeur : %s", $1;
-	printf " / montant : %s", $2;
-	printf " / type : %s", $3;
-	printf " / #chèque : %s", $4;
-	printf " / bene- : %s", $5;
-	printf " / bene+ : %s", $6;
-	printf "\n"
+	# printf "date valeur : %s", $1;
+	# printf " / montant : %s", $2;
+	# printf " / type : %s", $3;
+	# printf " / #chèque : %s", $4;
+	# printf " / bene- : %s", $5;
+	# printf " / bene+ : %s", $6;
+	# printf "\n"
 
     }
 	
