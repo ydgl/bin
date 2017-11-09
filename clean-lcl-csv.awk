@@ -16,6 +16,11 @@ function ltrim(s) { sub(/^[ \t\r\n]+/, "", s); return s }
 function rtrim(s) { sub(/[ \t\r\n]+$/, "", s); return s }
 function trim(s)  { return rtrim(ltrim(s)); }
 
+# Usage :
+#  iconv -f ISO-8859-1 -t UTF-8 lcl-test.xls | ./clean-lcl-csv.awk -v D=1	
+
+# TODO faire sauter la dernière ligne avec "00670 017425B"
+# Pas de type / tiers dépense
 
 BEGIN {
  FS = "\t"
@@ -30,9 +35,17 @@ BEGIN {
  PAYEE_PRET = "PRET IMMOBILIER ECH"
  PAYEE_ASSURANCE = "ASSURANCE DECOUVERT AUTORISE"
 
- PAYEE_CARD = "CB  "
- PAYEE_TRANSFERT = "PRLV "
  PAYEE_WITHDRAWAL = "CB  RETRAIT DU  "
+ PAYEE_CARD =       "CB  "
+ PAYEE_TRANSFERT = "PRLV "
+
+ # DEBUG = 1 for debug
+ if (D == "") {
+   nOutLevel = 0
+ } else {
+   nOutLevel = D
+ }
+
 
  printf "Date;Compte;Bénéficiaire;Montant;Catégorie;Mémo / Chq\n"
 } ;
@@ -58,15 +71,18 @@ BEGIN {
         check = 1
     }
 
+    #printf "index : %d type : %s\n", index(payeeExpense, PAYEE_WITHDRAWAL), type
     if ( (type == TYPE_CARD) &&  (index(payeeExpense, PAYEE_WITHDRAWAL) == 1) ) {
-	dateBegin = substr(payeeExpense,length(payeeExpense)-6, 5)
-	tsnPayee = "RETRAIT"
-	tsnDate = dateBegin strftime("/%Y")
-	check = 1
+	dateBegin = substr(payeeExpense,length(payeeExpense)-4, 5);
+	tsnPayee = "RETRAIT";
+	tsnDate = dateBegin strftime("/%Y");
+	check = 1;
 			
     } 
+    #printf "payee : %s\n", tsnPayee;
 
-    if ( (type == TYPE_CARD) &&  (index(payeeExpense, PAYEE_CARD) == 1) ) {
+    # Check == 0 : because PAYEE_CARD & PAYEE_WITHDRAWAL start both start by PAYEE_CARD
+    if ( (type == TYPE_CARD) &&  (index(payeeExpense, PAYEE_CARD) == 1)  && (check == 0)) {
 	#printf "0 %s\n", payeeExpense
 	tsnPayee = substr(payeeExpense, length(PAYEE_CARD)+1, length(payeeExpense)-10-length(PAYEE_CARD))
 	#printf "1 %s du %s\n", tsnPayee, tsnDate
@@ -99,30 +115,36 @@ BEGIN {
 
     
     if (type == "") {
-	if (index(payeeIncome,PAYEE_COTISATION) == 1) {
+	if (payeeIncome != null) {
+	#if (index(payeeIncome,PAYEE_COTISATION) == 1) {
 	    tsnPayee = trim(payeeIncome)
-	    check = 1
-	}
-	if (amount >= 0) {
-	    tsnPayee = trim(payeeIncome)
-	    check = 1
-	}
+	} else {
+	    tsnPayee = trim(payeeExpense)
+        }
+	#if (amount >= 0) {
+	#    tsnPayee = trim(payeeIncome)
+	#}
+	check = 1
     }
 
     
     if (check == 1) {
 	#printf "processed : %s\n", $0;
-        printf "date: %s, montant: %s, tiers: %s, memo: %s, type: %s.\n", tsnDate, amount, tsnPayee, tsnMemo,type
-	#printf "%s;%s;%s;%s;%s;%s\n", tsnDate, "LCL CC", tsnPayee, amount, "", tsnMemo
+	if (nOutLevel == 0) {
+	  printf "%s;%s;%s;%s;%s;%s\n", tsnDate, "LCL CC", tsnPayee, amount, "", tsnMemo
+	} else {
+          printf "date: %s, montant: %s, tiers: %s, memo: %s, type: %s.\n", tsnDate, amount, tsnPayee, tsnMemo,type
+        }
     } else {
 	printf "unprocessed : %s\n", $0
-	# printf "date valeur : %s", $1;
-	# printf " / montant : %s", $2;
-	# printf " / type : %s", $3;
-	# printf " / #chèque : %s", $4;
-	# printf " / bene- : %s", $5;
-	# printf " / bene+ : %s", $6;
-	# printf "\n"
+        if (nOutLevel >= 1) {
+	  printf "date valeur : %s", $1;
+	  printf " / montant : %s", $2;
+	  printf " / type : %s", $3;
+	  printf " / #chèque : %s", $4;
+	  printf " / bene- : %s", $5;
+	  printf " / bene+ : %s", $6;
+	  printf "\n"
 
     }
 	
