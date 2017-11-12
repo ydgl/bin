@@ -35,6 +35,7 @@ BEGIN {
  PAYEE_PRET = "PRET IMMOBILIER ECH"
  PAYEE_ASSURANCE = "ASSURANCE DECOUVERT AUTORISE"
 
+
  PAYEE_WITHDRAWAL = "CB  RETRAIT DU  "
  PAYEE_CARD =       "CB  "
  PAYEE_TRANSFERT = "PRLV "
@@ -146,7 +147,7 @@ BEGIN {
 	  printf " / bene+ : %s", $6;
 	  printf "\n"
 
-    }
+       }
 	
+   }
 }
-

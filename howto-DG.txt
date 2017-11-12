@@ -381,8 +381,11 @@ set nobk
 " Active la coloration syntaxique
 syntax enable
 " TAB à 4 avec remplissage d'espace
-???? set sw = 4
-???? set ts ???
+set expandtab
+set shiftwidth = 4
+set softtabstop = 4
+" Enconding to UTF-8
+set encoding=utf-8
 
 " .... jusque la
 
