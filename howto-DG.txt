@@ -391,6 +391,10 @@ set encoding=utf-8
 
 le menu :options permet de configurer vim en interactif
 
+
+
+Sur Windows le fichier de configuration est dans : C:\Users\dlaurent\_vimrc
+
 ------------------------------------------------------------------------------
 #MP3
 ------------------------------------------------------------------------------
