@@ -381,12 +381,19 @@ set nobk
 " Active la coloration syntaxique
 syntax enable
 " TAB à 4 avec remplissage d'espace
-???? set sw = 4
-???? set ts ???
+set expandtab
+set shiftwidth = 4
+set softtabstop = 4
+" Enconding to UTF-8
+set encoding=utf-8
 
 " .... jusque la
 
 le menu :options permet de configurer vim en interactif
+
+
+
+Sur Windows le fichier de configuration est dans : C:\Users\dlaurent\_vimrc
 
 ------------------------------------------------------------------------------
 #MP3
@@ -489,7 +496,7 @@ plante (fait un core dump) alors que je lis le DVD normalement.
 
 
 ------------------------------------------------------------------------------
-#EMACS #20140928 
+#EMACS #20171026 
 ------------------------------------------------------------------------------
 
 Pour supprimer la fenêtre d'aide C-X C-1
@@ -509,6 +516,10 @@ Sélectionner des morceaux de text
 2/ Positionner le curseur sur l'autre extrémité
 3/ C-w (pour effacer)
 
+Commentaires
+ajouter C-c C-c 
+retirer M-;
+
 Goto line M-g-g  
 
 Supprimer le fichier de backup
@@ -517,6 +528,18 @@ Dans ~/.emacs entrer :
 
 Note : il est possible d'activer les raccourcis classiques (CTRL+C/X/V)
 
+Outil pour pouvoir refactorer (renommer)
+https://github.com/victorhge/iedit
+1- Télécharger et mettre dans un répertoire
+2- Modifier .emacs (sur windows double antislash)
+	(add-to-list 'load-path "C:\\devtools\\emacs-plugin\\iedit")
+	(require 'iedit)
+  
+Pour forcer l'encodage en UTF-8 (a fonctionné sur windows)
+(set-language-environment "UTF-8")
+
+Bon résumé 
+https://www.johndcook.com/blog/emacs_windows/
 
 ------------------------------------------------------------------------------
 #PHOTO / #SHOTWELL / #PICASA
@@ -818,7 +841,7 @@ changer les mdp git (supprimer le user git sur mac)
 
 
 ------------------------------------------------------------------------------
-#GIT #DEVELOPPEMENT #201305
+#GIT #DEVELOPPEMENT #201705
 -----------------------------------------------------------------------------
 
 Les commandes de base pour bosser avec un serveur git
@@ -849,10 +872,46 @@ le certificat de la CA : ça fonctionne pas. Un moyen consiste à désactiver
 la vérification pour git en ligne de commande comme suit :
 $ export GIT_SSL_NO_VERIFY=true
 
+Pour le rebase APEC B --> A ___________________________________________________
+
+On souhaite intégrer le code de la branche B dans A (qui est notre branche de dev).
+Ensuite une fois la branche A à jour avec le code de B on merge la branche A dans B.
+
+I/ Mettre à jour les deux repo A et B
+git checkout B
+# on est sur B
+git pull
+git checkout A
+# on est sur A
+git pull
+
+II/ On fait le rebase
+git rebase develop
+
+# le git rebase s'arrête pour laisse la personne gérer les conflits ...
+# Pour résoudre les conflits utiliser les IDE , git add ... / 
+# PAS besoin de commiter les conflits résolut
+
+git rebase --continue
+
+III/ On push sur le repository
+# Lorsque les conflits sont résolus penser à vérifier que depuis le début du merge personne n'a fait de commit
+
+# 1- On fait un mail pour demander de ne plus commiter (car on va faire un push -f)
+
+# 2- On récupère l'état exact de la branche origin
+git fetch 
+
+# 3- On vérifie que origin/<A> et <A> sont idem (que tous les commit qui sont avant origin/<A> sont aussi avant <A>)
+# Si on a des pb à ce niveau : ????
+
+# 4- On push la version que l'on a
+git push --force
+
 
 ------------------------------------------------------------------------------
 #MAC OS X #201305
------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 Ajout d'un utilisateur : passer par l'interface graphique. Les commandes disponible sur le net ne marche pas forcément. Elles sont spécifique à l'OS et sa version.
 
 Pour connaitre la version de l'os MAC OSX
@@ -899,3 +958,11 @@ Display Manager : Gestionnaire des écrans, donc on trouve la fenêtre de login
 
 
 X Serveur : C'est un serveur de display. Ceci impose un client (x client), il est appelé xterm (ce n'est pas une fenêtre shell).
+
+------------------------------------------------------------------------------
+#IDEA #INTELLIJ #JETBRAINS #20170713
+------------------------------------------------------------------------------
+
+Pour activer #POWERSHELL comme terminal il faut donner le chemin complet à intellij 
+
+C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe

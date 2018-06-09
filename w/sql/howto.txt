@@ -1,0 +1,2 @@
+Voir ApecPedia : getUserSource.sh ou formatSource.awk
+
