@@ -88,10 +88,12 @@ function mysync() {
 if [ $(( d + s )) -eq 0 ]
 then
   echo "start sync at `date`"
-  mysync "$SRCDIR/DOC/Family" "$DSTDIR/DOC"
-  mysync "$SRCDIR/DOC/Arabelle" "$DSTDIR/DOC"
-  mysync "$SRCDIR/DOC/DG" "$DSTDIR/DOC"
-  mysync "$SRCDIR/FILMS/1-DESSSINS_ANIMES" "$DSTDIR/FILMS"
+  #mysync "$SRCDIR/DOC/Family" "$DSTDIR/DOC"
+  #mysync "$SRCDIR/DOC/Arabelle" "$DSTDIR/DOC"
+  #mysync "$SRCDIR/DOC/DG" "$DSTDIR/DOC"
+  #mysync "$SRCDIR/FILMS/1-DESSINS_ANIMES" "$DSTDIR/FILMS"
+  mysync "$SRCDIR/FILMS/2-SERIES" "$DSTDIR/FILMS"
+  mysync "$SRCDIR/FILMS/FILMS2015" "$DSTDIR/FILMS"
   echo "end sync at `date`"
 else
   echo "No sync : fail to mount one of the two directories"
