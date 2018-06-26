@@ -960,9 +960,16 @@ Display Manager : Gestionnaire des écrans, donc on trouve la fenêtre de login
 X Serveur : C'est un serveur de display. Ceci impose un client (x client), il est appelé xterm (ce n'est pas une fenêtre shell).
 
 ------------------------------------------------------------------------------
-#IDEA #INTELLIJ #JETBRAINS #20170713
+#IDEA #INTELLIJ #JETBRAINS #20170713 #DEVLOPPEMENT
 ------------------------------------------------------------------------------
 
 Pour activer #POWERSHELL comme terminal il faut donner le chemin complet à intellij 
 
 C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe
+
+------------------------------------------------------------------------------
+#VSC #MICROSOFT #20180626 #DEVLOPPEMENT
+------------------------------------------------------------------------------
+Shortcut :
+Run commands : CTRL+SHIFT+P
+
