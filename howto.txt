@@ -968,8 +968,33 @@ Pour activer #POWERSHELL comme terminal il faut donner le chemin complet à inte
 C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe
 
 ------------------------------------------------------------------------------
-#VSC #MICROSOFT #20180626 #DEVLOPPEMENT
+#VSC #MICROSOFT #20180727 #DEVLOPPEMENT
 ------------------------------------------------------------------------------
 Shortcut :
 Run commands : CTRL+SHIFT+P
 
+Settings : 
+
+Fichier de settings.json
+{
+    "git.path": "D:\\devtools\\git\\bin\\git.exe"
+}
+
+Créer C:\Users\UserName\AppData\Roaming\Code\User\locale.json
+{
+     "locale":"en-US"
+}
+
+------------------------------------------------------------------------------
+#DBEAVER #DB #ORACLE #20180727
+------------------------------------------------------------------------------
+
+Ajouter dans dbeaver.ini
+
+-vm
+d:\utils\jdk1.8.0_40\bin\javaw.exe
+
+Mettre les lib du connecteur dans le répertoire de DBEAVER
+
+Pour récupérer les connexion d'une autre installation, copier le fichier :
+c:\users\<user>\.dbeaver4\General\.dbeaver-data-sources.xml
