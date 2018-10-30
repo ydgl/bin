@@ -640,9 +640,10 @@ Pour installer la version 13.04 :
 
 Config
 	Gigabyte Triton
-	CM P5B Deluxe WIFI/AP 
+	CM P5B Deluxe WIFI/AP   Compatible avec tous les CPU dont le FSB est de 1333/1066/800/533 MHz sauf Quad Core
 		socket 775
 		IDE: Ultra ATA 133 + SATA : ATA/II
+		RAM : DDR2 800/667/533
 		PCI Express 16x
                 2 ethernet : marvell
 	1x1024Mo Corsair VSG1GB667D2
