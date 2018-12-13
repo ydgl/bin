@@ -373,6 +373,7 @@ EndSection
 ------------------------------------------------------------------------------
 
 Fichier de settings ~/.vimrc
+Attention dans les settings il ne faut pas de d'espace autour du signe "="
 
 " Faire un copier / coller depuis ici ........
 
@@ -382,8 +383,8 @@ set nobk
 syntax enable
 " TAB à 4 avec remplissage d'espace
 set expandtab
-set shiftwidth = 4
-set softtabstop = 4
+set shiftwidth=4
+set softtabstop=4
 " Enconding to UTF-8
 set encoding=utf-8
 
