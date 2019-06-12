@@ -12,6 +12,8 @@ rem becareful with trailing space !!!
 set dirtobackup=%~1
 set srchomedir=%~2
 set dsthomedir=%~3
+set today=%date:~0,2%
+
 
 rem call function
 call :backupDIR
@@ -26,10 +28,10 @@ REM backupDIR backup directory %dirtobackup%
 @echo BGN %srchomedir%%dirtobackup% to %dsthomedir%%dirtobackup%
 
 
-md "%dsthomedir%%dirtobackup%"
+md "%dsthomedir%%dirtobackup%\%today%"
 
 
-robocopy "%srchomedir%%dirtobackup%" "%dsthomedir%%dirtobackup%" /MIR
+robocopy "%srchomedir%%dirtobackup%" "%dsthomedir%%dirtobackup%\%today%" /MIR
 set time1=%date:~6,4%-%date:~3,2%-%date:~0,2%_%time:~0,8%
 set time2=%time1: =0%
 set time2=%time1::=-%
