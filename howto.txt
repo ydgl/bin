@@ -972,9 +972,9 @@ C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe
 #VSC #MICROSOFT #20180727 #DEVLOPPEMENT
 ------------------------------------------------------------------------------
 Shortcut :
-Run commands : CTRL+SHIFT+P
+Run commands : CTRL+SHIFT+P  --> ??
 
-Settings : 
+Files / Preferences / Settings (CTRL+,)
 
 Fichier de settings.json
 {
@@ -986,8 +986,13 @@ Créer C:\Users\UserName\AppData\Roaming\Code\User\locale.json
      "locale":"en-US"
 }
 
+Reinstall
+get https://code.visualstudio.com/docs/?dv=winzip
+
+
+
 ------------------------------------------------------------------------------
-#DBEAVER #DB #ORACLE #20180727
+#DBEAVER #DB #ORACLE #20190725
 ------------------------------------------------------------------------------
 
 Ajouter dans dbeaver.ini
@@ -999,3 +1004,12 @@ Mettre les lib du connecteur dans le répertoire de DBEAVER
 
 Pour récupérer les connexion d'une autre installation, copier le fichier :
 c:\users\<user>\.dbeaver4\General\.dbeaver-data-sources.xml
+
+Remplacement de la version portable
+wget https://dbeaver.io/files/dbeaver-ce-latest-win32.win32.x86_64.zip
+remove dbeaver.old
+rename dbeaver--> dbeaver.old
+unzip --> dbeaver
+modif dbeaver.ini
+
+
