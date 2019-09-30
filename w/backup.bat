@@ -12,9 +12,6 @@ REM   1-OPEN WINDOWS TASK PLANNIFIER
 REM   2-CREATE FOLDER FOR YOUR OWN TASK ON THE LEFT
 REM   3-CLICK CREATE TASK AND FOLLOW WIZARD
 
-REM net use Z: \\spsnas\prj_dgl
-REM net use Z: \\spsnas\prj_dgl /PERSISTENT:YES
-
 rem becareful with trailing space !!!
 set dirtobackup=%~1
 set srchomedir=%~2
@@ -22,6 +19,9 @@ set dsthomedir=%~3
 set inc_bk=%~4
 set today=%date:~0,2%
 
+
+REM TODO test folder dsthomedir
+REM TODO test folder srchomedir/dirtobackup
 
 call :backupDIR
 

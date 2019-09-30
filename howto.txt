@@ -969,7 +969,7 @@ Pour activer #POWERSHELL comme terminal il faut donner le chemin complet à inte
 C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe
 
 ------------------------------------------------------------------------------
-#VSC #MICROSOFT #20180727 #DEVLOPPEMENT
+#VSC #MICROSOFT #20180727 #DEVELOPPEMENT #STUDIO
 ------------------------------------------------------------------------------
 Shortcut :
 Run commands : CTRL+SHIFT+P  --> ??
