@@ -979,6 +979,7 @@ Files / Preferences / Settings (CTRL+,)
 Fichier de settings.json
 {
     "git.path": "D:\\devtools\\git\\bin\\git.exe"
+	"terminal.integrated.shell.windows": "d:\\devtools\\PowerShell-6.2.3-win-x64\\pwsh.exe"
 }
 
 Créer C:\Users\UserName\AppData\Roaming\Code\User\locale.json
