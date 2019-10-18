@@ -13,6 +13,9 @@
 .PARAMETER INSTALL_URL
     URL where to download new portable application version
 
+.PARAMETER PRODUCT_PATH
+    Application is already locally available
+
 .PARAMETER PRODUCT_NAME
     Define install recipe and destination in $DEVTOOLS
 
@@ -38,8 +41,8 @@
 param (
     [Parameter (mandatory = $true)]
     [string] $PRODUCT_NAME = $null,
-    [Parameter(mandatory = $true)]
     [string] $INSTALL_URL = $null,
+    [string] $PRODUCT_PATH = $null,
     [switch] $NO_SWAP 
 )
 
@@ -131,6 +134,20 @@ function dbeaver($zipFileNamePath, $destFolder) {
 
 }
 
+function vsc($zipFileNamePath, $destFolder) {
+    $CURRENT_FUNCTION = $MyInvocation.MyCommand
+    #Write-Host "Install $CURRENT_FUNCTION from $zipFileNamePath to $destFolder"
+
+    installNewZip $CURRENT_FUNCTION "$zipFileNamePath" "$destFolder\$CURRENT_FUNCTION.new" 
+
+    
+    Write-Host "- Remove $CURRENT_FUNCTION.old ..." -NoNewline
+    Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "$destFolder\$CURRENT_FUNCTION.old"
+    Write-Host " OK" -f Green
+
+
+}
+
 
 $DEVTOOLS_HOME = [Environment]::GetEnvironmentVariable("DEVTOOLS","User")
 if (-not $DEVTOOLS_HOME){
@@ -142,8 +159,11 @@ if (-not $DEVTOOLS_HOME){
 }
 
 
-
-Write-Host "$INSTALL_URL --> $DEVTOOLS_HOME\$PRODUCT_NAME"
+If ($PRODUCT_PATH -eq $null) {
+    Write-Host "$INSTALL_URL --> $DEVTOOLS_HOME\$PRODUCT_NAME"
+} else {
+    Write-Host "$PRODUCT_PATH --> $DEVTOOLS_HOME\$PRODUCT_NAME"
+}
 
 
 
@@ -152,7 +172,11 @@ if (Test-FolderLocked "$DEVTOOLS_HOME\$PRODUCT_NAME") {
 } else {
 
     if (Get-Command $PRODUCT_NAME -ErrorAction SilentlyContinue) {
-        $installFile = dl($INSTALL_URL)
+        if ($PRODUCT_PATH -eq $null) {
+            $installFile = dl($INSTALL_URL)
+        } else {
+            $installFile = $PRODUCT_PATH
+        }
 
         Invoke-Expression "$PRODUCT_NAME $installFile $DEVTOOLS_HOME"
 
