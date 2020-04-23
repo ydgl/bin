@@ -798,7 +798,7 @@ Archi :
 - Le mac heberge le serveur apache HTTPS, la freebox dirige le port 443
   vers le mac. DocRoot = /Library/WebServer/Documents/gp
 - Je n'ai pas fait de serveur ssh (ça aurait été plus simple) car le 
-  port 22 est bloqué à l'APEC.
+  port 22 est bloqué au boulot
 - Le repository est sur le NAS, le montage est en NFS. 
 
 Mémo / Notes / URL / Doc :
@@ -874,7 +874,7 @@ le certificat de la CA : ça fonctionne pas. Un moyen consiste à désactiver
 la vérification pour git en ligne de commande comme suit :
 $ export GIT_SSL_NO_VERIFY=true
 
-Pour le rebase APEC B --> A ___________________________________________________
+Pour le rebase B --> A ___________________________________________________
 
 On souhaite intégrer le code de la branche B dans A (qui est notre branche de dev).
 Ensuite une fois la branche A à jour avec le code de B on merge la branche A dans B.
@@ -1013,5 +1013,33 @@ remove dbeaver.old
 rename dbeaver--> dbeaver.old
 unzip --> dbeaver
 modif dbeaver.ini
+
+------------------------------------------------------------------------------
+#TELETRAVAIL #APEC 
+------------------------------------------------------------------------------
+
+https://docs.google.com/document/d/1KKf0-7chGAOH5LO6azfdjGEHJYeNhOG6oCaajZ2rGDo/edit
+
+------------------------------------------------------------------------------
+#KANBOARD #PHP #20200423
+------------------------------------------------------------------------------
+evaluate / test kanboard https://kanboard.org/ without admin right on windows
+
+- tested for PHP 7.4.5 & kanboard 1.2.14 & windows 10
+- dl php at https://www.php.net/downloads for windows & extract (me = C:\devtools\php-7.4.5)
+- dl https://kanboard.org/ and extract (me = C:\devtools\kb)
+- rename php.ini-developpement --> php.ini
+- edit php.ini :
+	* uncomment: extension=gd2
+	* uncomment: extension=mbstring
+	* uncomment: extension=openssl
+	* uncomment: extension=pdo_sqlite
+	* specify ext dir: extension_dir = "c:\devtools\php-7.4.5\ext"
+- check that "data" dir in php is writable
+- open powershell
+- locate in kanboard dir : :\devtools\kb
+- run php : C:\devtools\php-7.4.5\php.exe -S localhost:8080
+- open browser : localhost:8080
+- login admin/admin
 
 
