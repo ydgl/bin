@@ -341,6 +341,15 @@ quelques lien
 http://askubuntu.com/questions/61419/change-the-window-manager-unity-2d-launches-on-login
 
 ------------------------------------------------------------------------------
+#GNOME / #DESKTOP / #LAUNCHER
+------------------------------------------------------------------------------
+To launch an application with double click a simple way is to create 
+a desktop file in  /usr/share/applications
+
+Desktop file format
+https://developer.gnome.org/integration-guide/stable/desktop-files.html.en
+
+------------------------------------------------------------------------------
 #NVIDIA / #GRAPHIC_CARD
 ------------------------------------------------------------------------------
 
