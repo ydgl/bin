@@ -9,6 +9,18 @@ Essayer de mettre en dernier tag un tag de date comme ci-dessus qui correspond
 
 Pour parcourir : search sur le motif '^---
 
+------------------------------------------------------------------------------
+#EXCEL #MACRO #20200612
+------------------------------------------------------------------------------
+Les macro excel sont dans 
+C:\Users\dlaurent\AppData\Roaming\Microsoft\Excel\XLSTART
+Ce dossier permet de les partager entre fichier pour un même utilisateur
+Pour les partager entre utilisateur il faut les mettre dans le dossier
+d'installation du office.
+
+le dossier Roaming et Local contiennent les données de l'utilisateur.
+Roaming a du sens si il y a un domaine windows, à ce moment on peut changer 
+de PC dans le domaine.
 
 ------------------------------------------------------------------------------
 #COMPTE #USER #UTILISATEUR
