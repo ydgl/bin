@@ -19,7 +19,7 @@ il faut changer le user id en le mettant < 1024
 
 usermod -u <le nouveau num> <username à changer>
 ex : 
-usermode -u 999 dlaurent
+usermode -u 999 userA
 
 # Pour cacher la liste des utilisateur > à 1024
 greeter-hide-users=true
@@ -408,7 +408,7 @@ le menu :options permet de configurer vim en interactif
 
 
 
-Sur Windows le fichier de configuration est dans : C:\Users\dlaurent\_vimrc
+Sur Windows le fichier de configuration est dans : C:\Users\<usr>\_vimrc
 
 ------------------------------------------------------------------------------
 #MP3
@@ -701,10 +701,10 @@ Config
 -----------------------------------------------------------------------------
 #MAIL #EVOLUTION #20200723
 -----------------------------------------------------------------------------
-Pour se connecter au mail Apec 
+Pour se connecter au mail Boulot 
 
-Adresse du serveur : https://email.apec.fr/EWS/Exchange.asmx
-Utilisateur : dlaurent (sans nom de domaine)
+Adresse du serveur : https://serveur.domain.fr/EWS/Exchange.asmx
+Utilisateur : utilisateur (sans nom de domaine)
 Authentification method : NTLM
 
 
@@ -1039,7 +1039,7 @@ unzip --> dbeaver
 modif dbeaver.ini
 
 ------------------------------------------------------------------------------
-#TELETRAVAIL #APEC 
+#TELETRAVAIL #BOULOT 
 ------------------------------------------------------------------------------
 
 https://docs.google.com/document/d/1KKf0-7chGAOH5LO6azfdjGEHJYeNhOG6oCaajZ2rGDo/edit
