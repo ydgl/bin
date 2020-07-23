@@ -285,11 +285,24 @@ greeter-session=unity-greeter
 user-session=ubuntu
 
 ------------------------------------------------------------------------------
-#DESKTOP / #GDM / #GNOME_SHELL
+#DESKTOP / #GNOME_SHELL / #LAUNCHER / #20200609
 ------------------------------------------------------------------------------
 
-Voir le desktop : ctrl+alt+d
+To launch an application with double click a simple way is to create 
+a ".desktop" file in  /usr/share/applications
 
+Desktop file format
+https://developer.gnome.org/integration-guide/stable/desktop-files.html.en
+
+use svg as icon, set absolute path
+
+See desktop : ctrl+alt+d
+
+Install dconf editor to customize gnome registry
+Default sound is in org/gnome/desktop/sound.
+
+If you want the windows to flash wheen there is an error go to
+"Universal access" in the ubuntu settings and setup "visual alert"
 
 ------------------------------------------------------------------------------
 #DISPLAYMANAGER / #LIGHTDM
@@ -340,14 +353,6 @@ https://fedoraproject.org/wiki/Features/Gnome_shell_software_rendering
 quelques lien 
 http://askubuntu.com/questions/61419/change-the-window-manager-unity-2d-launches-on-login
 
-------------------------------------------------------------------------------
-#GNOME / #DESKTOP / #LAUNCHER
-------------------------------------------------------------------------------
-To launch an application with double click a simple way is to create 
-a desktop file in  /usr/share/applications
-
-Desktop file format
-https://developer.gnome.org/integration-guide/stable/desktop-files.html.en
 
 ------------------------------------------------------------------------------
 #NVIDIA / #GRAPHIC_CARD
@@ -692,6 +697,16 @@ Config
 	Pb : Monter un iso
 	correction : 
                 sudo mount -t iso9660 -o ro,loop ./the_fountain_dvdr-ct.img /home/ydg/iso
+
+-----------------------------------------------------------------------------
+#MAIL #EVOLUTION #20200723
+-----------------------------------------------------------------------------
+Pour se connecter au mail Apec 
+
+Adresse du serveur : https://email.apec.fr/EWS/Exchange.asmx
+Utilisateur : dlaurent (sans nom de domaine)
+Authentification method : NTLM
+
 
 -----------------------------------------------------------------------------
 #MAIL #GOLGOTH13
@@ -1052,3 +1067,11 @@ evaluate / test kanboard https://kanboard.org/ without admin right on windows
 - login admin/admin
 
 
+------------------------------------------------------------------------------
+#OUTLOOK #CALENDAR #EVOLUTION #UBUNTU #LINUX #20200707
+------------------------------------------------------------------------------
+https://www.b247.eu.org/2019/01/gnome-calendar-and-outlookcom-two-way.html
+
+sudo apt-get install evolution evolution-ews
+configure as an exchange online account
+server = outlook.office365.com
