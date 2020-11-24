@@ -1087,3 +1087,32 @@ https://www.b247.eu.org/2019/01/gnome-calendar-and-outlookcom-two-way.html
 sudo apt-get install evolution evolution-ews
 configure as an exchange online account
 server = outlook.office365.com
+
+------------------------------------------------------------------------------
+#WINDOWS #HOME #FOLDER #20201124
+------------------------------------------------------------------------------
+
+0/ Être loggué avec le <compte> qui a le <compte_path> que l'on veut renommer 
+1/ Lancer cmd en tant qu'administrateur
+2/ net users Administrateur /active:yes
+3/ fermer cmd
+4/ Lancer msconfig en tant qu'administrateur
+5/ Choisir Option "Démarrage selectif" + Checkbox "Charger Sce système" + Checkbox "Charger Elt de démarrage"
+  (décliquer recliquer sur "Charger Sce système" si besoin pour que le bouton OK & appliquer soient actif)
+6/ Cliquer OK --> une fenêtre propose le reboot : accepter
+7/ Aprés reboot se logguer "Administrateur"
+8/ Aller dans le folder C:\Users
+9/ Renommer le <compte_path> par le path que vous souhaitez, appelons le <compte_path_new>
+10/ Lancer msconfig
+11/ Choisir l'option "démarrage normal"
+12/ Reboot
+13/ Aprés reboot se logguer "Administrateur"
+14/ Lancer regedit
+15/ Chercher la clé "ProfileImagePath" qui contient "C:\Users\<compte_path>", elle est dans
+   HKEY_LOCAL_MACHINE\SOFTWARE\MICROSOFT\Windows NT\CurrentVersion\ProfileList\<UUID>\ProfileImagePath chez moi
+16/ Reboot
+17/ Aprés reboot se logguer avec son <compte>
+18/ Lancer cmd en tant qu'administrateur
+19/ net users Administrateur /active:normal
+20/ fermer cmd
+
