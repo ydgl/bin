@@ -34,7 +34,7 @@ goto :end
 @echo BGN backupDIR %srchomedir%%dirtobackup% to %dsthomedir%
 
 if "%inc_bk%" EQU "ibk" (
-  del /FS "%dsthomedir%%dirtobackup%.ibk\%today%"
+  del /S /F /Q "%dsthomedir%%dirtobackup%.ibk\%today%"
   md "%dsthomedir%%dirtobackup%.ibk\%today%"
   robocopy "%srchomedir%%dirtobackup%" "%dsthomedir%%dirtobackup%.ibk\%today%" /S /MAXAGE:2
 )
