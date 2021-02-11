@@ -174,6 +174,16 @@ j'obtiens une erreur du style "::1" host unknown, ceci montre que postrges se co
 sur le hosts en ipv6.
 
 ------------------------------------------------------------------------------
+#NODE #JAVASCRIPT  #NPM #TYPESCRIPT #20210211 
+------------------------------------------------------------------------------
+Pour installer sans sudo / root
+
+1/ Dl le zip officiel & extract dans dir "toto"
+2/ add "toto" to .profile like : 
+export PATH=/devtools/node-v14.15.4-linux-x64/bin:$PATH
+
+
+------------------------------------------------------------------------------
 #RUBY 
 ------------------------------------------------------------------------------
 installation de ruby via rvm
@@ -1087,3 +1097,17 @@ https://www.b247.eu.org/2019/01/gnome-calendar-and-outlookcom-two-way.html
 sudo apt-get install evolution evolution-ews
 configure as an exchange online account
 server = outlook.office365.com
+
+------------------------------------------------------------------------------
+#RASPBERRY #AUDIO #UPGRADE #UPDATE #202012
+------------------------------------------------------------------------------
+
+After updateing rasp pi4 from user other than "pi"
+my standard user (non sudoers) is not able to play audio.
+To fix : 
+1- turn standard user to sudoer
+2- run sudo raspi-config
+3- activate hdmi output
+4- turn standard user to no sudoer
+
+
