@@ -41,6 +41,16 @@ greeter-show-manual-login=true
 allow-guest=false
 
 ------------------------------------------------------------------------------
+#DESKTOP / #GNOME_SHELL / #BACKGROUND / #20210221
+------------------------------------------------------------------------------
+to set background to solid single color
+
+gsettings set org.gnome.desktop.background picture-options 'none'
+gsettings set org.gnome.desktop.background primary-color '#291010'
+
+
+
+------------------------------------------------------------------------------
 #MAIL #THUNDERBIRD
 ------------------------------------------------------------------------------
 
