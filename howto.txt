@@ -1145,3 +1145,20 @@ To fix :
 19/ net users Administrateur /active:normal
 20/ fermer cmd
 
+------------------------------------------------------------------------------
+#NODEJS #WINDOWS #INSTALL #20200304
+------------------------------------------------------------------------------
+
+Pour installer nodejs 
+1- Télécharger zip NodeJS
+2- Dézipper dans C:\Users\dlaurent\dt\node-v15.11.0-win-x64
+3- mettre "C:\Users\dlaurent\dt\node-v15.11.0-win-x64" dans le path
+3- npm install -g typescript
+
+Pour tester l'internationalisation : new Intl.DateTimeFormat('es',{month:'long'}).format(new Date(9E8));
+... affiche enero si OK, sinon M01
+
+Si pb d'internationalisation , voir doc nodejs https://nodejs.org/api/intl.html
+1- npm i full-icu
+2- Setter NODE_ICU_DATA à la chaine affiché par le script ci-dessus, dans mon cas
+   NODE_ICU_DATA = node_modules\full-icu
