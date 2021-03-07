@@ -321,24 +321,41 @@ greeter-session=unity-greeter
 user-session=ubuntu
 
 ------------------------------------------------------------------------------
-#DESKTOP / #GNOME_SHELL / #LAUNCHER / #20200609
+#DESKTOP / #GNOME_SHELL / #LAUNCHER / #ICON / #20210307
 ------------------------------------------------------------------------------
 
-To launch an application with double click a simple way is to create 
-a ".desktop" file in  /usr/share/applications
+Customization for gnome_shell
 
-Desktop file format
-https://developer.gnome.org/integration-guide/stable/desktop-files.html.en
+1/ Launch an application with double click ______________________
+
+A simple way is to create a "xxxx.desktop" file in  /usr/share/applications
+or $HOME/.local/share/applications for users applications
+
+
+".desktop" file format
+see https://developer.gnome.org/integration-guide/stable/desktop-files.html.en
 
 use svg as icon, set absolute path
 
-See desktop : ctrl+alt+d
+Example :
+
+[Desktop Entry]
+Name=Idea
+Exec=/home/ydgl/devtools/idea-IC-203.7148.57/bin/idea.sh %u
+Icon=/home/ydgl/devtools/idea-IC-203.7148.57/bin/idea.svg
+Type=Application
+
+------------------------------------------------------------------------------
+#DESKTOP / #GNOME_SHELL / #SOUND / #CUSTOMIZATION/ #20210307
+------------------------------------------------------------------------------
+
+2/ Get rid of default sound to setup a flash instead
 
 Install dconf editor to customize gnome registry
 Default sound is in org/gnome/desktop/sound.
 
-If you want the windows to flash wheen there is an error go to
-"Universal access" in the ubuntu settings and setup "visual alert"
+If you want the windows to flash when there is an error go to
+"Universal access" / "Accessibility" in the ubuntu settings and setup "visual alert"
 
 ------------------------------------------------------------------------------
 #DISPLAYMANAGER / #LIGHTDM
@@ -1123,7 +1140,7 @@ To fix :
 3- activate hdmi output
 4- turn standard user to no sudoer
 
-#WINDOWS #HOME #FOLDER #20201124
+#WINDOWS #HOME #FOLDER #20210307
 ------------------------------------------------------------------------------
 0/ Être loggué avec le <compte> qui a le <compte_path> que l'on veut renommer 
 1/ Lancer cmd en tant qu'administrateur
@@ -1148,6 +1165,10 @@ To fix :
 18/ Lancer cmd en tant qu'administrateur
 19/ net users Administrateur /active:normal
 20/ fermer cmd
+
+Mars 2021 : Je constate que le changement des variables user environnements ne marche plus.
+Elles sont associé à l'ancien nom d'utilisateur. Peut être qu'il est possible de les changer en passant 
+par powershell mais je n'ai pas essayé (et pas par l'interface graphique comme on fait d'habitude)
 
 ------------------------------------------------------------------------------
 #NODEJS #WINDOWS #INSTALL #20200304
