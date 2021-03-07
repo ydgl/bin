@@ -189,9 +189,13 @@ sur le hosts en ipv6.
 Pour installer sans sudo / root
 
 1/ Dl le zip officiel & extract dans dir "toto"
-2/ add "toto" to .profile like : 
+2/ add "toto" to .bash_profile like : 
 export PATH=/devtools/node-v14.15.4-linux-x64/bin:$PATH
+3/ Déslogue / Relogue
+4/ npm install -g typescript
 
+
+(.profile is for CSH, .bash_profile is for BASH, il faut de délogguer / reloguer)
 
 ------------------------------------------------------------------------------
 #RUBY 
