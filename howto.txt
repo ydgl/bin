@@ -90,6 +90,33 @@ RAF :
 - Comment on transforme en EML des fichiers de outlook
 
 ------------------------------------------------------------------------------
+#ONEDRIVE / #GOOGLEDRIVE / #DRIVE / #20210318
+------------------------------------------------------------------------------
+
+on Fedora : onedrive https://github.com/abraunegg/onedrive
+>sudo dnf install rclone
+# Becarefull : when selecting the type of storage
+#  for One Drive the name of the remote is "onedrive" (lowercase, no space)
+#  this name must be the same used to mount the drive below
+>rclone config
+(config is guided in a simple way)
+>mkdir ~/onedrive
+>rclone --vfs-cache-mode writes mount "one drive":  ~/onedrive
+
+Add mount as a statup app
+sh -c "rclone --vfs-cache-mode writes mount \"one drive\": ~/OneDrive"
+
+For on demande sync, example :
+    Sync FROM OneDrive: rclone sync -P onedrive:Files ~/Documents/
+    Sync TO OneDrive: rclone sync -P ~/Documents/ onedrive:Files
+
+    Sync FROM OneDrive: rclone sync -P onedrive:Music ~/Music/
+    Sync TO OneDrive: rclone sync -P ~/Music/ onedrive:Music
+
+see https://rclone.org
+
+
+------------------------------------------------------------------------------
 #ENCFS / #CRYPTO
 ------------------------------------------------------------------------------
 
@@ -182,6 +209,20 @@ host    all         all         127.0.0.1/32          trust
 j'obtiens une erreur du style "::1" host unknown, ceci montre que postrges se connecte en ipv6. En retirant la définition du localhost en ipv6 du fichier
 /etc/hosts : ça passe. En fait il faut appliquer la configuration en trust
 sur le hosts en ipv6.
+
+------------------------------------------------------------------------------
+#BASH #EXPORT #20210319
+-----------------------------------------------------------------------------
+
+Si on veut ajouter des variable d'env en export sur ubuntu ou fedora ...,
+1/ il faut les ajouter dans .bash_profile 
+2/ si on veut les utiliser de suite : source .bash_profile
+3/ il faut se delogguer et se relogguer.
+
+Le fichier .profile est le fichier normalement alloué à CSH
+Le fichier .bash_profile est le fichier normalement allouée  à BASH
+Normalement BASH charge .profile si il ne voit pas de CSH
+Le fichier .(bash_)profile est chargé au login (d'où delogue / relog)
 
 ------------------------------------------------------------------------------
 #NODE #JAVASCRIPT  #NPM #TYPESCRIPT #20210211 
@@ -436,8 +477,22 @@ EndSection
 
 
 ------------------------------------------------------------------------------
-#VIM / #GVIM
+#VIM / #GVIM / #VIMX / #20210319
 ------------------------------------------------------------------------------
+
+*Installation*
+
+
+Sur Linux il faut installer le package vimx
+(il permet de faire les copier coller entre les fenêtres avec le copier/coller)
+
+>sudo dnf install vimx
+Ajouter dans .profile :
+alias vi='vimx'
+
+*Configuration*
+
+Sur Windows le fichier de configuration est dans : C:\Users\<usr>\_vimrc
 
 Fichier de settings ~/.vimrc
 Attention dans les settings il ne faut pas de d'espace autour du signe "="
@@ -457,11 +512,12 @@ set encoding=utf-8
 
 " .... jusque la
 
+*Tips*
+
 le menu :options permet de configurer vim en interactif
 
 
 
-Sur Windows le fichier de configuration est dans : C:\Users\<usr>\_vimrc
 
 ------------------------------------------------------------------------------
 #MP3
@@ -996,11 +1052,6 @@ Ajout d'un utilisateur : passer par l'interface graphique. Les commandes disponi
 Pour connaitre la version de l'os MAC OSX
 sw_vers -productVersion
 
-------------------------------------------------------------------------------
-#BASH #EXPORT #20141006
------------------------------------------------------------------------------
-Si on veut ajouter des variable d'env en export sur ubuntu, il faut 
-les ajouter dans .profile ... et ensuite il faut se logguer et se relogguer.
 
 ------------------------------------------------------------------------------
 #SSH
