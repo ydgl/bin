@@ -101,7 +101,7 @@ on Fedora : onedrive https://github.com/abraunegg/onedrive
 >rclone config
 (config is guided in a simple way)
 >mkdir ~/onedrive
->rclone --vfs-cache-mode writes mount "one drive":  ~/onedrive
+>rclone --vfs-cache-mode writes mount "onedrive":  ~/onedrive
 
 Add mount as a statup app
 sh -c "rclone --vfs-cache-mode writes mount \"one drive\": ~/OneDrive"
@@ -215,14 +215,13 @@ sur le hosts en ipv6.
 -----------------------------------------------------------------------------
 
 Si on veut ajouter des variable d'env en export sur ubuntu ou fedora ...,
-1/ il faut les ajouter dans .bash_profile 
-2/ si on veut les utiliser de suite : source .bash_profile
-3/ il faut se delogguer et se relogguer.
+il faut les ajouter dans .bashrc 
 
-Le fichier .profile est le fichier normalement alloué à CSH
-Le fichier .bash_profile est le fichier normalement allouée  à BASH
-Normalement BASH charge .profile si il ne voit pas de CSH
-Le fichier .(bash_)profile est chargé au login (d'où delogue / relog)
+.bash_profile, .profile, ... j'ai rien compris
+
+définition "login shell"
+définition "interactive shell"
+
 
 ------------------------------------------------------------------------------
 #NODE #JAVASCRIPT  #NPM #TYPESCRIPT #20210211 
